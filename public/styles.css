@@ -1,0 +1,20 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+:root {
+    --background-color: #E8EBF4;
+    --text-color: #010101;
+    --primary-color: #b463bb;
+    --secondary-color: #CF631F;
+    --accent-color: #D5A8D7;
+}
+html, body {
+    height: 100%;
+    width: 100%;
+    background-color: var(--background-color);
+}
+#root {
+    height: 100%;
+}
