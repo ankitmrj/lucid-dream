@@ -1,0 +1,7 @@
+.sign-in-form {
+    width: 300px;
+}
+.sign-in-form form {
+    display: flex;
+    flex-direction: column;
+}
