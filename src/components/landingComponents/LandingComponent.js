@@ -1,13 +1,21 @@
 import React from 'react';
 import './Landing.css';
+import sleep from '../images/sleep.png';
 
 function LandingComponent() {
   return (
     <div id='landing-component'>
         <section id='landing-section'>
-            <h1>Make Your Dreams Come True!</h1>
-            <p>If you could control your dreams and do as you please, what would you do? Find out tonight with the help of Stay Lucid! Lucid Dreaming is when the dreamer is aware they're dreaming, sounds simple enough right? It takes an immense amount of practice and mental awareness which is much harder than it sounds, Stay Lucid is here to make that as easy as possible!</p>
-
+            <div className='landing-text'>
+                <h1>Make Your Dreams Come True</h1>
+                <p>If you could control your dreams and do as you please, what would you do? Find out tonight with the help of Stay Lucid! Lucid Dreaming is when the dreamer is aware they're dreaming, sounds simple enough right? It takes an immense amount of practice and mental awareness which is much harder than it sounds, Stay Lucid is here to make that as easy as possible!</p>
+                <div className='landing-learn-more'>
+                    <div className='landing-buttons'>
+                        <button>Learn More!</button>
+                    </div>
+                    <img src={sleep} width='300px' />
+                </div>
+            </div>
             <div className='key-features'>
                 <h2>Key Features</h2>
                 <div className='feature'>

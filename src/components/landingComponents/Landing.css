@@ -1,5 +1,49 @@
+nav {
+    background-color: var(--violet);
+}
 #landing-component {
     width: 100%;
     height: 100%;
     background-color: var(--background-color);
+}
+.landing-text {
+    padding: 30px;
+    text-align: center;
+    background-color: var(--dark-violet);
+    color: var(--background-color);
+}
+.landing-text h1 {
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+}
+.landing-text p {
+    opacity: 0.9;
+    width: 70%;
+    font-size: 1.1rem;
+    margin: auto;
+    margin-bottom: 30px;;
+}
+.landing-learn-more {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    gap: 100px;
+    align-items: center;
+}
+.landing-buttons button {
+    height: 3rem;
+    width: 120px;
+    background-color: var(--light-purple);
+    border: none;
+    color: var(--background-color);
+    box-shadow: 0 0 2px 1px rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+}
+.landing-buttons button:hover {
+    background-color: var(--purple);
+    cursor: pointer;
+}
+.landing-buttons button:active {
+    background-color: var(--violet);
+    box-shadow: 0 0 2px 0 rgba(255, 255, 255, 0.1);
 }
