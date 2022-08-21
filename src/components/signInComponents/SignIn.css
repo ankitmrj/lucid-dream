@@ -1,4 +1,6 @@
-html, body {
+#sign-in-component {
+    width: 100%;
+    height: 100%;
     background-image: linear-gradient(to right top, #231032, #2e1541, #391b51, #452062, #512673);
 }
 #sign-in-section {
@@ -52,7 +54,7 @@ html, body {
     gap: 10px;
 }
 #sign-in-button {
-    background-color: #BD7AEE;
+    background-color: var(--primary-color);
     color: var(--text-color);
     border: none;
     border-radius: 25px;
@@ -61,12 +63,12 @@ html, body {
     transition: all 0.3s ease;
 }
 #sign-in-button:hover {
-    background-color: #9A49DC;
+    background-color: var(--light-purple);
     color: var(--background-color);
     cursor: pointer;
 }
 #sign-in-button:active {
-    background-color: #7336A4;
+    background-color: var(--purple);
     box-shadow: none;
 }
 .sign-up-text {
