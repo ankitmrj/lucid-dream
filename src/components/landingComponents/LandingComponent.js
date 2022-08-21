@@ -9,17 +9,19 @@ function LandingComponent() {
   return (
     <div id='landing-component'>
         <section id='landing-section'>
-            <div className='landing-text'>
-                <h1>Make Your Dreams Come True</h1>
-                <p>If you could control your dreams and do as you please, what would you do? Find out tonight with the help of Stay Lucid! Lucid Dreaming is when the dreamer is aware they're dreaming, sounds simple enough right? It takes an immense amount of practice and mental awareness which is much harder than it sounds, Stay Lucid is here to make that as easy as possible!</p>
-                <div className='landing-learn-more'>
-                    <div className='landing-buttons'>
-                        <button>Learn More!</button>
+            <div id='intro-section'>
+                <div className='landing-text'>
+                    <h1>MAKE YOUR DREAMS COME TRUE</h1>
+                    <p>If you could control your dreams and do as you please, what would you do? Find out tonight with the help of Stay Lucid! Lucid Dreaming is when the dreamer is aware they're dreaming, sounds simple enough right? It takes an immense amount of practice and mental awareness which is much harder than it sounds, Stay Lucid is here to make that as easy as possible!</p>
+                    <div className='landing-learn-more'>
+                        <div className='landing-buttons'>
+                            <button>Learn More!</button>
+                        </div>
+                        <img alt='sleep illustration' src={sleep} width='300px' />
                     </div>
-                    <img alt='sleep illustration' src={sleep} width='300px' />
                 </div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3B1C54" fill-opacity="1" d="M0,32L48,48C96,64,192,96,288,112C384,128,480,128,576,112C672,96,768,64,864,64C960,64,1056,96,1152,117.3C1248,139,1344,149,1392,154.7L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3B1C54" fill-opacity="1" d="M0,32L48,48C96,64,192,96,288,112C384,128,480,128,576,112C672,96,768,64,864,64C960,64,1056,96,1152,117.3C1248,139,1344,149,1392,154.7L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>
             <div className='key-features'>
                 <h2>Key Features</h2>
                 <div className='features'>
