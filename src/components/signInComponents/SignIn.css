@@ -1,5 +1,5 @@
 html, body {
-    background-image: linear-gradient(to left bottom, #72007c, #610569, #500856, #400944, #300933);
+    background-image: linear-gradient(to right top, #231032, #2e1541, #391b51, #452062, #512673);
 }
 #sign-in-section {
     width: 100%;
@@ -29,10 +29,12 @@ html, body {
     color: var(--text-color);
 }
 .input input {
-    height: 1.5rem;
-    background-color: rgba(255, 255, 255);
+    height: 2rem;
+    border-radius: 5px;
+    background-color: white;
     color: var(--text-color);
-    border: 2px solid var(--text-color);
+    border: 1px solid var(--text-color);
+    padding: 10px 5px;
 }
 .input input:focus {
     outline: none;
@@ -44,12 +46,25 @@ html, body {
     gap: 10px;
 }
 #sign-in-button {
-    background-color: #db30ea;
+    background-color: #BD7AEE;
+    color: var(--text-color);
     border: none;
     border-radius: 25px;
     height: 3rem;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
 }
+#sign-in-button:hover {
+    background-color: #9A49DC;
+    cursor: pointer;
+}
+#sign-in-button:active {
+    background-color: #7336A4;
+    box-shadow: none;
+}
 .sign-up-text {
+    color: var(--text-color);
     text-align: center;
+}
+.sign-up-text:hover {
+    text-decoration: none;
 }
