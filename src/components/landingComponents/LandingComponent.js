@@ -1,6 +1,9 @@
 import React from 'react';
 import './Landing.css';
 import sleep from '../images/sleep.png';
+import journal from '../images/travel-journal-black.png';
+import time from '../images/time-black.png';
+import forum from '../images/forum.png';
 
 function LandingComponent() {
   return (
@@ -13,22 +16,27 @@ function LandingComponent() {
                     <div className='landing-buttons'>
                         <button>Learn More!</button>
                     </div>
-                    <img src={sleep} width='300px' />
+                    <img alt='sleep illustration' src={sleep} width='300px' />
                 </div>
             </div>
             <div className='key-features'>
                 <h2>Key Features</h2>
-                <div className='feature'>
-                    <h3>Dream Journal</h3>
-                    <p>Dream recall is one of the most important things when it comes to lucid dreaming because what's the point of a lucid dream if you can't even remember it? The best way to train your dream recall is something that we provide for you! The Stay Lucid dream journal.</p>
-                </div>
-                <div className='feature'>
-                    <h3>Reality Checks</h3>
-                    <p>Our busy lives restrict us from remembering to do a reality check every hour, we got you covered! With Stay Lucid, you have the option of reminding yourself to do a reality check every hour within a set period daily!</p>
-                </div>
-                <div className='feature'>
-                    <h3>The Dream Forum</h3>
-                    <p>There are millions of different techniques to lucid dream and it's impossible to list each one on this website, that's where the Dream Forum comes in! Users like yourself can share techniques that work for them, their dream experiences, questions, and advice on anything involving dreaming!</p>
+                <div className='features'>
+                    <div className='feature'>
+                        <img alt='dream journal' src={journal} width='50px' />
+                        <h3>Dream Journal</h3>
+                        <p>Dream recall is one of the most important things when it comes to lucid dreaming because what's the point of a lucid dream if you can't even remember it? The best way to train your dream recall is something that we provide for you! The Stay Lucid dream journal.</p>
+                    </div>
+                    <div className='feature'>
+                        <img alt='reality check' src={time} width='50px' />
+                        <h3>Reality Checks</h3>
+                        <p>Our busy lives restrict us from remembering to do a reality check every hour, we got you covered! With Stay Lucid, you have the option of reminding yourself to do a reality check every hour within a set period daily!</p>
+                    </div>
+                    <div className='feature'>
+                        <img alt='forum' src={forum} width='50px' />
+                        <h3>The Dream Forum</h3>
+                        <p>There are millions of different techniques to lucid dream and it's impossible to list each one on this website, that's where the Dream Forum comes in! Users like yourself can share techniques that work for them, their dream experiences, questions, and advice on anything involving dreaming!</p>
+                    </div>
                 </div>
             </div>
         </section>

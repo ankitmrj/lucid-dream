@@ -3,7 +3,7 @@ nav {
 }
 #landing-component {
     width: 100%;
-    height: 100%;
+    height: fit-content;
     background-color: var(--background-color);
 }
 .landing-text {
@@ -46,4 +46,19 @@ nav {
 .landing-buttons button:active {
     background-color: var(--violet);
     box-shadow: 0 0 2px 0 rgba(255, 255, 255, 0.1);
+}
+.key-features {
+    padding: 30px;
+    text-align: center;
+}
+.key-features h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+.features {
+    display: flex;
+    justify-content: space-evenly;
+}
+.feature {
+    max-width: 30%;
 }
