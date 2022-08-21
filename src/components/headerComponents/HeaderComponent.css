@@ -17,3 +17,6 @@ nav {
     align-items: center;
     justify-content: space-evenly;
 }
+nav img:hover {
+    cursor: pointer;
+}
