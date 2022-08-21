@@ -28,7 +28,7 @@
     font-size: 2rem;
     color: var(--text-color);
 }
-.sign-in-form form {
+.sign-in-form .form {
     margin: auto;
     width: 80%;
     display: flex;
