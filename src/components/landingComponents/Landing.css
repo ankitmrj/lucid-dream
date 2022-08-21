@@ -11,6 +11,10 @@ nav {
     text-align: center;
     background-color: var(--dark-violet);
     color: var(--background-color);
+    position: relative;
+}
+svg {
+    position: absolute;
 }
 .landing-text h1 {
     margin-bottom: 30px;
@@ -18,8 +22,7 @@ nav {
 }
 .landing-text p {
     opacity: 0.9;
-    width: 70%;
-    font-size: 1.1rem;
+    width: 60%;
     margin: auto;
     margin-bottom: 30px;;
 }
@@ -30,13 +33,16 @@ nav {
     gap: 100px;
     align-items: center;
 }
+.landing-learn-more img {
+    filter: drop-shadow(-2px 3px 5px rgba(0, 0, 0, 0.3));
+}
 .landing-buttons button {
     height: 3rem;
     width: 120px;
     background-color: var(--light-purple);
     border: none;
     color: var(--background-color);
-    box-shadow: 0 0 2px 1px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.3);
     border-radius: 25px;
 }
 .landing-buttons button:hover {
@@ -45,9 +51,10 @@ nav {
 }
 .landing-buttons button:active {
     background-color: var(--violet);
-    box-shadow: 0 0 2px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
 }
 .key-features {
+    margin-top: 150px;
     padding: 30px;
     text-align: center;
 }

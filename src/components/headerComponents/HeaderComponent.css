@@ -2,6 +2,7 @@ header {
     height: 100%;
     width: 60px;
     position: fixed;
+    z-index: 999;
     right: 0;
 }
 .icon {
