@@ -3,7 +3,7 @@ import './SignIn.css';
 
 function SignUpComponent() {
   return (
-    <>
+    <div className='sign-up-component'>
         <section id='sign-in-section'>
             <div className='sign-in-form'>
               <h1>Sign Up</h1>
@@ -31,7 +31,7 @@ function SignUpComponent() {
                 </form>
             </div>
         </section>
-    </>
+    </div>
   )
 }
 
