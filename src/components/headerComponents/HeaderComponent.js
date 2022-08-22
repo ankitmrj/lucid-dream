@@ -11,7 +11,7 @@ function HeaderComponent() {
     <header>
         <nav id='nav-links'>
             <Link to='/' ><img alt='home' src={home} className='icon' /></Link>
-            <img alt='Journal' src={journal} className='icon' />
+            <Link to='dream-journal'><img alt='Journal' src={journal} className='icon' /></Link>
             <img alt='Tools' src={tools} className='icon' />
             <Link to='profile' ><img alt='Sign In' src={user} className='icon' /></Link>
         </nav>
