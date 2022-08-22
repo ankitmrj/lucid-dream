@@ -1,4 +1,5 @@
 footer {
+    margin-top: 15%;
     z-index: 5;
     position: relative;
 }
@@ -7,12 +8,15 @@ footer {
     position: absolute;
     bottom: 60%;
 }
-.footer-sections {
-    padding: 60px 0;
-    color: var(--background-color);
+.footer-bg {
     background-color: var(--dark-violet);
+}
+.footer-sections {
+    position: relative;
+    padding: 30px 0;
+    color: var(--background-color);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-around;
 }
 .footer-about {
@@ -22,10 +26,10 @@ footer {
 .footer-about h2,
 .footer-contact h2 {
     font-weight: 400;
-    font-size: 1.7rem;
 }
 .footer-about p,
 .footer-contact p {
+    font-size: 0.8rem;
     font-weight: 300;
 }
 .footer-contact {
@@ -35,13 +39,15 @@ footer {
     width: 30%;
 }
 .footer-contact a {
+    font-size: 0.8rem;
     color: var(--primary-color);
 }
 .footer-contact a:hover {
     color: var(--background-color);
 }
 .author {
-    padding: 10px 0;
+    padding: 5px 0;
+    font-size: 0.8rem;
     color: var(--background-color);
     background-color: var(--dark-violet);
     text-align: center;
@@ -56,5 +62,5 @@ footer {
     border: none;
     background-color: var(--background-color);
     height: 1px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }

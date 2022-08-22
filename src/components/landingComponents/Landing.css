@@ -9,6 +9,7 @@ nav {
 .landing-text {
     padding: 30px;
     height: 90vh;
+    max-height: 700px;
     text-align: center;
     background-color: var(--dark-violet);
     color: var(--background-color);
