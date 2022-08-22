@@ -80,6 +80,10 @@
     color: var(--text-color);
     text-align: center;
 }
+.sign-up-text {
+    text-decoration: underline;
+}
 .sign-up-text:hover {
     text-decoration: none;
+    cursor: pointer;
 }

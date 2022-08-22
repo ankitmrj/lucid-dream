@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import './SignIn.css';
 import { auth } from '../../firebase-config';
 
-function SignUpComponent() {
+function SignUpComponent(props) {
   const [registerUsername, setRegisterUsername] = useState('');
   const [registerEmail, setRegisterEmail] = useState('');
   const [registerPassword, setRegisterPassword] = useState('');
@@ -11,6 +11,9 @@ function SignUpComponent() {
   const register = async () => {
     try {
       const user = await createUserWithEmailAndPassword(auth, registerEmail, registerPassword);
+      updateProfile(auth.currentUser, {
+        displayName: registerUsername
+      })
       console.log(user);
     } catch (error) {
       console.log(error.message);
@@ -52,7 +55,7 @@ function SignUpComponent() {
                     </div>
                     <div className='sign-in-actions'>
                       <button id='sign-in-button' onClick={register}>Sign Up</button>
-                      <a className='sign-up-text' href='/sign-in'>Already have an account? Sign In</a>
+                      <a className='sign-up-text' onClick={() => props.action('sign-in')}>Already have an account? Sign In</a>
                     </div>
                 </div>
             </div>
