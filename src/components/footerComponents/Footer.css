@@ -1,0 +1,60 @@
+footer {
+    z-index: 5;
+    position: relative;
+}
+.footer-svg {
+    z-index: -1;
+    position: absolute;
+    bottom: 60%;
+}
+.footer-sections {
+    padding: 60px 0;
+    color: var(--background-color);
+    background-color: var(--dark-violet);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.footer-about {
+    text-align: center;
+    width: 30%;
+}
+.footer-about h2,
+.footer-contact h2 {
+    font-weight: 400;
+    font-size: 1.7rem;
+}
+.footer-about p,
+.footer-contact p {
+    font-weight: 300;
+}
+.footer-contact {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+}
+.footer-contact a {
+    color: var(--primary-color);
+}
+.footer-contact a:hover {
+    color: var(--background-color);
+}
+.author {
+    padding: 10px 0;
+    color: var(--background-color);
+    background-color: var(--dark-violet);
+    text-align: center;
+}
+.author a {
+    color: var(--primary-color);
+}
+.author a:hover {
+    color: var(--background-color);
+}
+.author hr {
+    border: none;
+    background-color: var(--background-color);
+    height: 1px;
+    margin-bottom: 10px;
+}
