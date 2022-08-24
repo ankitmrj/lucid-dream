@@ -2,7 +2,6 @@ footer {
     position: absolute;
     bottom: 0;
     z-index: 5;
-    position: relative;
 }
 .footer-svg {
     z-index: -1;

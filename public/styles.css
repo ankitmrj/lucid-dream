@@ -5,6 +5,13 @@
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
+html {
+    min-height: 100vh;
+}
+#root, body {
+    overflow: auto;
+    min-height: 100%;
+}
 :root {
     --background-color: #E8EBF4;
     --text-color: #231032;
@@ -15,9 +22,6 @@
     --light-purple: #9A49DC;
     --secondary-color: #CF631F;
     --accent-color: #D5A8D7;
-}
-html, body {
-    width: 100%;
 }
 #root {
     margin-right: 60px;
