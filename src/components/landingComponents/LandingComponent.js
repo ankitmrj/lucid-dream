@@ -45,7 +45,6 @@ function LandingComponent() {
                     </div>
                 </div>
             </div>
-        <FooterComponent/>
     </div>
   )
 }

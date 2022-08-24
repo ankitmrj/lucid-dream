@@ -1,4 +1,5 @@
 import HeaderComponent from "./components/headerComponents/HeaderComponent";
+import FooterComponent from "./components/footerComponents/FooterComponent";
 import LandingComponent from "./components/landingComponents/LandingComponent";
 import ProfileComponent from "./components/signInComponents/ProfileComponent";
 import JournalComponent from "./components/journalComponents/JournalComponent";
@@ -14,6 +15,7 @@ function App() {
         <Route path='profile' element={<ProfileComponent/>}/>
         <Route path='dream-journal' element={<JournalComponent/>}/>
       </Routes>
+      <FooterComponent />
     </BrowserRouter>
   );
 }

@@ -4,7 +4,7 @@ import './Footer.css';
 function FooterComponent() {
   return (
     <footer>
-        <svg className='footer-svg' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3B1C54" fill-opacity="1" d="M0,192L120,202.7C240,213,480,235,720,229.3C960,224,1200,192,1320,176L1440,160L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z"></path></svg>
+        {/*<svg className='footer-svg' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3B1C54" fill-opacity="1" d="M0,192L120,202.7C240,213,480,235,720,229.3C960,224,1200,192,1320,176L1440,160L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z"></path></svg>*/}
         <div className='footer-bg'>
             <div className='footer-sections'>
                 <div className='footer-about'>

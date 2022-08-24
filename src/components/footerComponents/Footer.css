@@ -1,5 +1,6 @@
 footer {
-    margin-top: 15%;
+    position: absolute;
+    bottom: 0;
     z-index: 5;
     position: relative;
 }
