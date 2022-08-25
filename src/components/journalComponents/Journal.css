@@ -6,6 +6,9 @@
     min-height: 100%;
     width: 100%;
 }
+.hidden {
+    display: none !important;
+}
 /* The switch - the box around the slider */
 .switch {
     position: relative;
@@ -36,9 +39,6 @@
     right: 0;
     bottom: 0;
 }
-.slider:before {
-    background-color: white;
-}
 input:checked + .slider {
-    background-color: var(--primary-color);
+    background: linear-gradient(to top right, var(--primary-color), var(--accent-color));
 }
