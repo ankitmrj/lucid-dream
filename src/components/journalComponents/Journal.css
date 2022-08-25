@@ -23,6 +23,12 @@
 
 /* The slider */
 .slider {
+    display: flex;
+    align-items: center;
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    padding: 5px 10px;
+    width: fit-content;
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -34,8 +40,5 @@
     background-color: white;
 }
 input:checked + .slider {
-    background-color: #2196F3;
-}
-input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
+    background-color: var(--primary-color);
 }
