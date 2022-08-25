@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import './Journal.css';
 
 function JournalComponent() {
   return (
@@ -9,13 +10,22 @@ function JournalComponent() {
             <div className='new-dream'>
                 <button>New Dream</button>
                 <div className='dream-text'>
-                    <textarea></textarea>
-                    <button>+ Tags</button>
+                    <textarea rows='10' cols='100'></textarea>
+                    <p>Tags:</p>
                     <div className='tags'>
-                        <button>Lucid</button>
-                        <button>Nightmare</button>
-                        <button>Semi-Lucid</button>
-                        <button>Vivid</button>
+                        <label className='switch' htmlFor='lucid'>
+                            <input type='checkbox' id='lucid' name='lucid' value='Lucid' />
+                            <span className='slider'>Lucid</span>
+                        </label>
+                        <label htmlFor='nightmare'>Nightmare
+                            <input type='checkbox' id='nightmare' name='nightmare' value='Nightmare' />
+                        </label>
+                        <label htmlFor='semi-lucid'>Semi-Lucid
+                            <input type='checkbox' id='semi-lucid' name='semi-lucid' value='Semi-Lucid' />
+                        </label>
+                        <label htmlFor='vivid'>Vivid
+                            <input type='checkbox' id='vivid' name='vivid' value='Vivid' />
+                        </label>
                     </div>
                 </div>
             </div>

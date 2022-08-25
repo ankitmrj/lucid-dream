@@ -15,7 +15,9 @@ function App() {
         <Route path='profile' element={<ProfileComponent/>}/>
         <Route path='dream-journal' element={<JournalComponent/>}/>
       </Routes>
-      <FooterComponent />
+      <div id='footer'>
+        <FooterComponent/>
+      </div>
     </BrowserRouter>
   );
 }
