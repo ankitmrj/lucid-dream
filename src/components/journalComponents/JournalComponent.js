@@ -7,18 +7,18 @@ function JournalComponent() {
     //represents if the dream menu is hidden or not
     const [dreamInputVisible, setDreamInputVisible] = useState(false);
     const [dreamTitle, setDreamTitle] = useState('');
-    const [dreamDate, setDreamDate] = useState(new Date().toJSON().slice(0, 10)); //automatically sets to todays date
+    const [dreamDate, setDreamDate] = useState(new Date().toLocaleDateString('pt-br').split( '/' ).reverse( ).join( '-' )); //automatically sets to todays date
     const [dreamText, setDreamText] = useState('');
     //default dream tags
     const [dreamTags, setDreamTags] = useState(['lucid', 'nightmare', 'semi-lucid', 'vivid']);
     const [createTag, setCreateTag] = useState('');
-
-    const [dream, setDream] = useState({
+    const [dream, setDream] = useState([{
         title: dreamTitle,
         tags: dreamTags,
         date: dreamDate,
         dreamDesc: dreamText
-    })
+    }])
+    const [userDreams, setUserDreams] = useState([]);
 
     //toggles dream menu 
     const toggleDreamText = () => {
@@ -32,6 +32,13 @@ function JournalComponent() {
     const discardDream = () => {
         toggleDreamText();
         setDreamText('');
+        setDreamTitle('');
+        
+        for (let i in dreamCheckboxes){
+            if (dreamCheckboxes[i].checked){
+                dreamCheckboxes[i].checked = false;
+            }
+        }
     }
 
     //creates new tag and appends it to the bottom of tags
@@ -67,38 +74,77 @@ function JournalComponent() {
             createDreamTag(dreamTag)
         }
     }
+    
+    const displayUserDreams = (newDream) => {
+        const displayedDreams = document.querySelector('.displayed-dreams');
+
+        const dreamParent = document.createElement('div');
+        dreamParent.classList.add('dream');
+
+        const dreamTitleParent = document.createElement('div');
+        dreamTitleParent.classList.add('user-dream-title');
+
+        const dreamTitleText = document.createElement('h2');
+        dreamTitleText.innerHTML = newDream.title;
+
+        const dreamDateText = document.createElement('h4');
+        dreamDateText.innerHTML = newDream.date;
+
+        dreamParent.appendChild(dreamTitleParent);
+        dreamTitleParent.appendChild(dreamTitleText);
+        dreamTitleParent.appendChild(dreamDateText);
+
+        const dreamTagsParent = document.createElement('div');
+        dreamTagsParent.classList.add('user-dream-tags');
+        for (let i in newDream.tags){
+            const dreamTagText = document.createElement('p');
+            dreamTagText.classList.add('user-dream-tag');
+            
+            dreamTagText.innerHTML = newDream.tags[i];
+            dreamTagsParent.appendChild(dreamTagText);
+        }
+        console.log(newDream.tags)
+        dreamParent.appendChild(dreamTagsParent);
+        displayedDreams.appendChild(dreamParent);
+    }
 
     //add new tag to list as a checkbox
     const addNewTag = () => {
-        console.log(dreamTags.includes(createTag))
         if (!dreamTags.includes(createTag)){
             setDreamTags([...dreamTags, createTag]);
             createDreamTag(createTag);
             setCreateTag('');
         }
-        console.log(dreamTags)
     }
 
     const submitNewDream = () => {
         const activeDreamTags = [];
         for (let i in dreamCheckboxes){
             if (dreamCheckboxes[i].checked){
-                activeDreamTags.push(dreamCheckboxes[i].value)
+                activeDreamTags.push(dreamCheckboxes[i].value);
+                dreamCheckboxes[i].checked = false;
             }
         }
 
-        setDream({
+        const newDream = {
             title: dreamTitle, 
             tags: activeDreamTags, 
             date: dreamDate, 
             dreamDesc: dreamText
-        })
-        
+        }
+
+        setDream([...dream, newDream])
+        setUserDreams([...userDreams, dream]);
+        displayUserDreams(newDream);
+
+        toggleDreamText();
+        setDreamText('');
+        setDreamTitle('');
+
     }
 
     useEffect(() => {
         displayInitialDreamTags();
-        console.log(dream)
     }, [])
     useEffect(() => {
         console.log(dream)
@@ -145,6 +191,21 @@ function JournalComponent() {
                         <div className='tags'>
                         </div>
                         <button style={{marginBottom: '100px'}} onClick={submitNewDream}>Submit Dream</button>
+                    </div>
+                </div>
+            </section>
+            <section style={{marginBottom: '100px'}} id='user-dreams'>
+                <h1>Dreams:</h1>
+                <div className='displayed-dreams'>
+                    <div className='dream'>
+                        <div className='user-dream-title'>
+                            <h2>EXAMPLE DREAM</h2>
+                            <h4>2022-08-20</h4>
+                        </div>
+                        <div className='user-dream-tags'>
+                            <p className='user-dream-tag'>Lucid</p>
+                            <p className='user-dream-tag'>Vivid</p>
+                        </div>
                     </div>
                 </div>
             </section>
