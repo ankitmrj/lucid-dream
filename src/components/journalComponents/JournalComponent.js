@@ -2,50 +2,71 @@ import React, { useEffect, useState } from 'react';
 import './Journal.css';
 
 function JournalComponent() {
+    //represents if the dream menu is hidden or not
     const [dreamInputVisible, setDreamInputVisible] = useState(false);
     const [dreamTitle, setDreamTitle] = useState('');
-    const [dreamDate, setDreamDate] = useState(new Date().toJSON().slice(0, 10));
+    const [dreamDate, setDreamDate] = useState(new Date().toJSON().slice(0, 10)); //automatically sets to todays date
     const [dreamText, setDreamText] = useState('');
-    const [dreamTags, setDreamTags] = useState(['lucid', 'nightmare', 'semi-lucid', 'vivid']);
+    const [dreamTags, setDreamTags] = useState(['lucid', 'nightmare', 'semi-lucid', 'vivid']); //all tags to filter dreams
+    const [createTag, setCreateTag] = useState('');
 
+    //toggles dream menu 
     const toggleDreamText = () => {
         setDreamInputVisible(dreamInputVisible ? false : true);
         const dreamInput = document.querySelector('.dream-text');
 
         dreamInput.classList.toggle('hidden')
     }
+
+    //hides new dream menus and clears dream text
     const discardDream = () => {
         toggleDreamText();
         setDreamText('');
     }
-    const displayDreamTags = () => {
+
+    //creates new tag and appends it to the bottom of tags
+    const createDreamTag = (newTag) => {
         const tagsParent = document.querySelector('.tags');
 
+        //creats tag label and adds class
+        const tagLabel = document.createElement('label');
+        tagLabel.classList.add('switch');
+
+        //creates tag input with attributes
+        const tagInput = document.createElement('input');
+        tagInput.setAttribute('value', newTag);
+        tagInput.setAttribute('type', 'checkbox');
+        tagInput.setAttribute('id', newTag);
+        tagInput.setAttribute('name', newTag);
+
+        //creates tag span with text and attributes
+        const tagSpan = document.createElement('span');
+        tagSpan.classList.add('slider');
+        tagSpan.innerHTML = newTag.charAt(0).toUpperCase() + newTag.slice(1);
+
+        //appends elements
+        tagLabel.appendChild(tagInput);
+        tagLabel.appendChild(tagSpan);
+        tagsParent.appendChild(tagLabel);
+    }
+
+    //displays default dream tags 
+    const displayInitialDreamTags = () => {
         for (let i in dreamTags){
             const dreamTag = dreamTags[i]
-            //creats tags label and adds class
-            const tagLabel = document.createElement('label');
-            tagLabel.classList.add('switch');
-
-            //creates tags input with attributes
-            const tagInput = document.createElement('input');
-            tagInput.setAttribute('value', dreamTag);
-            tagInput.setAttribute('type', 'checkbox');
-            tagInput.setAttribute('id', dreamTag);
-            tagInput.setAttribute('name', dreamTag);
-
-            //creates tags span with text and attributes
-            const tagSpan = document.createElement('span');
-            tagSpan.classList.add('slider');
-            tagSpan.innerHTML = dreamTag.charAt(0).toUpperCase() + dreamTag.slice(1);
-
-            //appends elements
-            tagLabel.appendChild(tagInput, tagSpan);
-            tagsParent.appendChild(tagLabel);
+            createDreamTag(dreamTag)
         }
     }
+
+    //add new tag to list as a checkbox
+    const addNewTag = () => {
+        setDreamTags(...dreamTags, createTag);
+        createDreamTag(createTag);
+        setCreateTag('');
+    }
+
     useEffect(() => {
-        displayDreamTags()
+        displayInitialDreamTags()
     }, [])
 
     return (
@@ -80,6 +101,12 @@ function JournalComponent() {
                             onChange={(e) => setDreamText(e.target.value)}
                         ></textarea>
                         <p>Tags:</p>
+                        <input 
+                            type='text'
+                            value={createTag}
+                            onChange={(e) => setCreateTag(e.target.value)}
+                        />
+                        <button onClick={addNewTag}>+</button>
                         <div className='tags'>
                             {/*
                             <label className='switch'>
