@@ -10,6 +10,13 @@ function JournalComponent() {
     const [dreamTags, setDreamTags] = useState(['lucid', 'nightmare', 'semi-lucid', 'vivid']); //all tags to filter dreams
     const [createTag, setCreateTag] = useState('');
 
+    const [dream, setDream] = useState({
+        title: dreamTitle,
+        tags: dreamTags,
+        date: dreamDate,
+        dreamDesc: dreamText
+    })
+
     //toggles dream menu 
     const toggleDreamText = () => {
         setDreamInputVisible(dreamInputVisible ? false : true);
@@ -60,14 +67,22 @@ function JournalComponent() {
 
     //add new tag to list as a checkbox
     const addNewTag = () => {
-        setDreamTags(...dreamTags, createTag);
-        createDreamTag(createTag);
-        setCreateTag('');
+        console.log(dreamTags.includes(createTag))
+        if (!dreamTags.includes(createTag)){
+            setDreamTags([...dreamTags, createTag]);
+            createDreamTag(createTag);
+            setCreateTag('');
+        }
+        console.log(dreamTags)
     }
 
     useEffect(() => {
-        displayInitialDreamTags()
+        displayInitialDreamTags();
+        console.log(dream)
     }, [])
+    useEffect(() => {
+        console.log(dream)
+    }, [dream])
 
     return (
         <div id='journal-component'>
@@ -108,24 +123,8 @@ function JournalComponent() {
                         />
                         <button onClick={addNewTag}>+</button>
                         <div className='tags'>
-                            {/*
-                            <label className='switch'>
-                                <input type='checkbox' id='lucid' name='lucid' value='Lucid' />
-                                <span className='slider'>Lucid</span>
-                            </label>
-                            <label className='switch'>
-                                <input type='checkbox' id='nightmare' name='nightmare' value='Nightmare' />
-                                <span className='slider'>Nightmare</span>
-                            </label>
-                            <label className='switch'>
-                                <input type='checkbox' id='semi-lucid' name='semi-lucid' value='Semi-Lucid' />
-                                <span className='slider'>Semi-Lucid</span>
-                            </label>
-                            <label className='switch'>
-                                <input type='checkbox' id='vivid' name='vivid' value='Vivid' />
-                                <span className='slider'>Vivid</span>
-                    </label>*/}
                         </div>
+                        <button style={{marginBottom: '100px'}} onClick={() => setDream({title: dreamTitle, tags: dreamTags, date: dreamDate, dreamDesc: dreamText})}>Submit Dream</button>
                     </div>
                 </div>
             </section>
