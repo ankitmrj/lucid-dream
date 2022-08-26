@@ -12,13 +12,13 @@ function JournalComponent() {
     //default dream tags
     const [dreamTags, setDreamTags] = useState(['lucid', 'nightmare', 'semi-lucid', 'vivid']);
     const [createTag, setCreateTag] = useState('');
+    //list of dream objects for easy access
     const [dream, setDream] = useState([{
         title: dreamTitle,
         tags: dreamTags,
         date: dreamDate,
         dreamDesc: dreamText
     }])
-    const [userDreams, setUserDreams] = useState([]);
 
     //toggles dream menu 
     const toggleDreamText = () => {
@@ -75,35 +75,47 @@ function JournalComponent() {
         }
     }
     
+    //displays users dreams with title, date, and tags
     const displayUserDreams = (newDream) => {
+        //parent element of all user dreams
         const displayedDreams = document.querySelector('.displayed-dreams');
 
+        //container for dream title, date, and tags
         const dreamParent = document.createElement('div');
         dreamParent.classList.add('dream');
 
+        //container for title and date for flexbox
         const dreamTitleParent = document.createElement('div');
         dreamTitleParent.classList.add('user-dream-title');
 
+        //dream title
         const dreamTitleText = document.createElement('h2');
         dreamTitleText.innerHTML = newDream.title;
 
+        //dream date
         const dreamDateText = document.createElement('h4');
         dreamDateText.innerHTML = newDream.date;
 
+        //appends all elements to parents
         dreamParent.appendChild(dreamTitleParent);
         dreamTitleParent.appendChild(dreamTitleText);
         dreamTitleParent.appendChild(dreamDateText);
 
+        //dream tag container
         const dreamTagsParent = document.createElement('div');
         dreamTagsParent.classList.add('user-dream-tags');
+
+        //loops through tags and creates p element for each one
         for (let i in newDream.tags){
+            //p element for tag
             const dreamTagText = document.createElement('p');
             dreamTagText.classList.add('user-dream-tag');
             
+            //sets tag text and adds to container
             dreamTagText.innerHTML = newDream.tags[i];
             dreamTagsParent.appendChild(dreamTagText);
         }
-        console.log(newDream.tags)
+        //appends both divs to main dream container
         dreamParent.appendChild(dreamTagsParent);
         displayedDreams.appendChild(dreamParent);
     }
@@ -134,7 +146,6 @@ function JournalComponent() {
         }
 
         setDream([...dream, newDream])
-        setUserDreams([...userDreams, dream]);
         displayUserDreams(newDream);
 
         toggleDreamText();
