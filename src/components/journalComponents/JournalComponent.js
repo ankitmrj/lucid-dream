@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import './Journal.css';
 
 function JournalComponent() {
+    const dreamCheckboxes = document.querySelectorAll('.switch input');
+
     //represents if the dream menu is hidden or not
     const [dreamInputVisible, setDreamInputVisible] = useState(false);
     const [dreamTitle, setDreamTitle] = useState('');
     const [dreamDate, setDreamDate] = useState(new Date().toJSON().slice(0, 10)); //automatically sets to todays date
     const [dreamText, setDreamText] = useState('');
-    const [dreamTags, setDreamTags] = useState(['lucid', 'nightmare', 'semi-lucid', 'vivid']); //all tags to filter dreams
+    //default dream tags
+    const [dreamTags, setDreamTags] = useState(['lucid', 'nightmare', 'semi-lucid', 'vivid']);
     const [createTag, setCreateTag] = useState('');
 
     const [dream, setDream] = useState({
@@ -76,6 +79,23 @@ function JournalComponent() {
         console.log(dreamTags)
     }
 
+    const submitNewDream = () => {
+        const activeDreamTags = [];
+        for (let i in dreamCheckboxes){
+            if (dreamCheckboxes[i].checked){
+                activeDreamTags.push(dreamCheckboxes[i].value)
+            }
+        }
+
+        setDream({
+            title: dreamTitle, 
+            tags: activeDreamTags, 
+            date: dreamDate, 
+            dreamDesc: dreamText
+        })
+        
+    }
+
     useEffect(() => {
         displayInitialDreamTags();
         console.log(dream)
@@ -124,7 +144,7 @@ function JournalComponent() {
                         <button onClick={addNewTag}>+</button>
                         <div className='tags'>
                         </div>
-                        <button style={{marginBottom: '100px'}} onClick={() => setDream({title: dreamTitle, tags: dreamTags, date: dreamDate, dreamDesc: dreamText})}>Submit Dream</button>
+                        <button style={{marginBottom: '100px'}} onClick={submitNewDream}>Submit Dream</button>
                     </div>
                 </div>
             </section>
