@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { render } from 'react-dom';
 import './Journal.css';
 
 function JournalComponent() {
@@ -78,11 +77,14 @@ function JournalComponent() {
     }
 
     const toggleDisplayedDream = (e) => {
-        const searchTitle = e.target.id;
-
-        for (let i in userDreams){
+        console.log(e.path[0].id)
+        const searchTitle = e.path[0].id;
+        console.log(userDreams)
+        for (let i = 0; i < userDreams.length; i++){
             for (let key in userDreams[i]){
-                console.log(key);
+                if (userDreams[i][key] === searchTitle){
+                    console.log(userDreams.userDesc)
+                }
             }
         }
     
@@ -94,88 +96,46 @@ function JournalComponent() {
         const displayedDreams = document.querySelector('.displayed-dreams');
 
         //container for dream title, date, and tags
-        
-        //const dreamParent = document.createElement('div');
-        //dreamParent.classList.add('dream');
-        //dreamParent.setAttribute('id', newDream.title);
-        //dreamParent.addEventListener('click', () => {toggleDisplayedDream()})
+        const dreamParent = document.createElement('div');
+        dreamParent.classList.add('dream');
+        dreamParent.setAttribute('id', newDream.title);
+        dreamParent.addEventListener('click', toggleDisplayedDream)
 
         //container for title and date for flexbox
-        
-        //const dreamTitleParent = document.createElement('div');
-        //dreamTitleParent.classList.add('user-dream-title');
+        const dreamTitleParent = document.createElement('div');
+        dreamTitleParent.classList.add('user-dream-title');
 
         //dream title
-        const dreamTitleText = React.createElement(
-            'h2',
-            null,
-            newDream.title
-        )
-        
-        //const dreamTitleText = document.createElement('h2');
-        //dreamTitleText.innerHTML = newDream.title;
+        const dreamTitleText = document.createElement('h2');
+        dreamTitleText.innerHTML = newDream.title;
 
         //dream date
-        const dreamDateText = React.createElement(
-            'h4',
-            null,
-            newDream.date
-        )
-        const dreamTitleParent = React.createElement(
-            'div',
-            {className: 'user-dream-title'},
-            [dreamTitleText, dreamDateText]
-        )
-        //const dreamDateText = document.createElement('h4');
-        //dreamDateText.innerHTML = newDream.date;
+        const dreamDateText = document.createElement('h4');
+        dreamDateText.innerHTML = newDream.date;
 
         //appends all elements to parents
-        //dreamParent.appendChild(dreamTitleParent);
-        //dreamTitleParent.appendChild(dreamTitleText);
-        //dreamTitleParent.appendChild(dreamDateText);
+        dreamParent.appendChild(dreamTitleParent);
+        dreamTitleParent.appendChild(dreamTitleText);
+        dreamTitleParent.appendChild(dreamDateText);
 
         //dream tag container
-        
-        //const dreamTagsParent = document.createElement('div');
-        //dreamTagsParent.classList.add('user-dream-tags');
+        const dreamTagsParent = document.createElement('div');
+        dreamTagsParent.classList.add('user-dream-tags');
 
         //loops through tags and creates p element for each one
-        var elements = [];
         for (let i in newDream.tags){
             //p element for tag
-            const dreamTagText = React.createElement(
-                'p',
-                {className: 'user-dream-tag'},
-                newDream.tags[i]
-            )
-            elements.push(dreamTagText);
-            //const dreamTagText = document.createElement('p');
-            //dreamTagText.classList.add('user-dream-tag');
+            const dreamTagText = document.createElement('p');
+            dreamTagText.classList.add('user-dream-tag');
             
             //sets tag text and adds to container
-            //dreamTagText.innerHTML = newDream.tags[i];
-            //dreamTagsParent.appendChild(dreamTagText);
+            dreamTagText.innerHTML = newDream.tags[i];
+            dreamTagsParent.appendChild(dreamTagText);
         }
-        const dreamTagsParent = React.createElement(
-            'div',
-            {className: 'user-dream-tags'},
-            elements
-        )
 
         //appends both divs to main dream container
-        //dreamParent.appendChild(dreamTagsParent);
-        const dreamParent = React.createElement(
-            'div',
-            {
-                onClick: {toggleDisplayedDream},
-                id: newDream.title,
-                className: 'dream'
-            },
-            [dreamTitleParent, dreamTagsParent]
-        )
-        console.log(dreamParent)
-        
-        //displayedDreams.appendChild(dreamParent);
+        dreamParent.appendChild(dreamTagsParent);
+        displayedDreams.appendChild(dreamParent);
     }
 
     //add new tag to list as a checkbox
