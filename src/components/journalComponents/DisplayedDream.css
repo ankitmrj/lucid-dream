@@ -1,16 +1,43 @@
 #displayed-dream-component {
-    background-color: black;
-    width: 30%;
-    height: 30%;
+    background: linear-gradient(to top right, var(--text-color), var(--violet));
+    width: 100%;
+    height: 100%;
     position: absolute;
     color: white;
-    left: 100px;
+    text-align: center;
+    padding:  30px 110px 30px 50px;
+}
+.title {
+    font-size: 2rem;
+}
+.date {
+    font-size: 0.9rem;
+}
+.description {
+    font-size: 1.2rem;
 }
 .x {
-    width: 50px;
-    height: 50px;
-}
-.x-line {
     width: 30px;
-    height: 3px;
+    height: 30px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.x::before,
+.x::after {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 4px;
+    background-color: white;
+}
+.x::before {
+    transform: rotate(45deg);
+}
+.x::after {
+    transform: rotate(-45deg);
+}
+.x:hover {
+    cursor: pointer;
 }

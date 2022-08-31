@@ -1,18 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './DisplayedDream.css';
 
 function DisplayedDream(props) {
   return (
-    <div id='displayed-dream-component'>
-      <div className='x'>
-        <div className='x-line'></div>
-        <div className='x-line'></div>
+    <div style={{display: props.active}} id='displayed-dream-component'>
+      <div className='x' onClick={props.toggleActive}>
       </div>
-      <section id='displayed-dream'>
-        <h1>{props.woof}</h1>
-        <h1>{props.title}</h1>
-        <p>{props.date}</p>
-        <p>{props.dreamDesc}</p>
+      <section className='displayed-dream'>
+        <h1 className='title'>{props.title}</h1>
+        <p className='date'>{props.date}</p>
+        <p className='description'>{props.dreamDesc}</p>
       </section>
     </div>
   )

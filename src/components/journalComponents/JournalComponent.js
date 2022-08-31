@@ -24,6 +24,7 @@ function JournalComponent() {
     const [selectedTitle, setSelectedTitle] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedDesc, setSelectedDesc] = useState('');
+    const [isActive, setIsActive] = useState('none');
 
     //toggles dream menu 
     const toggleDreamText = () => {
@@ -91,6 +92,14 @@ function JournalComponent() {
         }
     }
 
+    const toggleVisibleDream = () => {
+        if (isActive === 'none'){
+            setIsActive('block');
+        } else {
+            setIsActive('none');
+        }
+    }
+
     const toggleDisplayedDream = (e) => {
         const searchTitle = e.target.id;
         var clickedDream;
@@ -104,6 +113,7 @@ function JournalComponent() {
         setSelectedTitle(clickedDream.title);
         setSelectedDate(clickedDream.date);
         setSelectedDesc(clickedDream.dreamDesc);
+        setIsActive('block');
         console.log(selectedTitle, selectedDate, selectedDesc)
     }
     
@@ -195,7 +205,7 @@ function JournalComponent() {
 
     return (
         <>
-        <DisplayedDream title={selectedTitle} date={selectedDate} dreamDesc={selectedDesc} />
+        <DisplayedDream title={selectedTitle} date={selectedDate} dreamDesc={selectedDesc} active={isActive} toggleActive={toggleVisibleDream} />
         <div id='journal-component'>
             <section id='journal-input'>
                 <h1>Dream Journal</h1>
