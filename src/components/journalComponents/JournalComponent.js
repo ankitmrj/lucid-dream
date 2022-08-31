@@ -29,6 +29,17 @@ function JournalComponent() {
         dreamInput.classList.toggle('hidden')
     }
 
+    useEffect(() => {
+        document.querySelectorAll('.dream').forEach(item => {
+            if (item.getAttribute('added') === "true"){
+
+            } else {
+                item.addEventListener('click', toggleDisplayedDream);
+                item.setAttribute('added', "true");
+            }
+        })
+    }, [userDreams])
+
     //hides new dream menus and clears dream text
     const discardDream = () => {
         toggleDreamText();
@@ -77,17 +88,15 @@ function JournalComponent() {
     }
 
     const toggleDisplayedDream = (e) => {
-        console.log(e.path[0].id)
-        const searchTitle = e.path[0].id;
-        console.log(userDreams)
-        for (let i = 0; i < userDreams.length; i++){
-            for (let key in userDreams[i]){
-                if (userDreams[i][key] === searchTitle){
-                    console.log(userDreams.userDesc)
-                }
+        const searchTitle = e.target.id;
+        var clickedDream;
+    
+        for (let dream in userDreams){
+            if (userDreams[dream].title === searchTitle){
+                clickedDream = userDreams[dream];
             }
         }
-    
+        console.log(clickedDream)
     }
     
     //displays users dreams with title, date, and tags
@@ -99,7 +108,7 @@ function JournalComponent() {
         const dreamParent = document.createElement('div');
         dreamParent.classList.add('dream');
         dreamParent.setAttribute('id', newDream.title);
-        dreamParent.addEventListener('click', toggleDisplayedDream)
+        //dreamParent.addEventListener('click', toggleDisplayedDream)
 
         //container for title and date for flexbox
         const dreamTitleParent = document.createElement('div');
@@ -217,13 +226,14 @@ function JournalComponent() {
                         <div className='tags'>
                         </div>
                         <button style={{marginBottom: '100px'}} onClick={submitNewDream}>Submit Dream</button>
+                        <button onClick={() => console.log(userDreams)}>ConsoleLog</button>
                     </div>
                 </div>
             </section>
             <section style={{marginBottom: '100px'}} id='user-dreams'>
                 <h1>Dreams:</h1>
                 <div className='displayed-dreams'>
-                    <div className='dream' onClick={toggleDisplayedDream}>
+                    <div className='dream' id='example-dream' onClick={toggleDisplayedDream}>
                         <div className='user-dream-title'>
                             <h2>EXAMPLE DREAM</h2>
                             <h4>2022-08-20</h4>
