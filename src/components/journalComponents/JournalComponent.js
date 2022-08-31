@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import DisplayedDream from './DisplayedDream';
 import './Journal.css';
 
 function JournalComponent() {
@@ -20,6 +21,9 @@ function JournalComponent() {
     */
     //list of dream objects with the above template
     const [userDreams, setUserDreams] = useState([]);
+    const [selectedTitle, setSelectedTitle] = useState('');
+    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedDesc, setSelectedDesc] = useState('');
 
     //toggles dream menu 
     const toggleDreamText = () => {
@@ -97,6 +101,10 @@ function JournalComponent() {
             }
         }
         console.log(clickedDream)
+        setSelectedTitle(clickedDream.title);
+        setSelectedDate(clickedDream.date);
+        setSelectedDesc(clickedDream.dreamDesc);
+        console.log(selectedTitle, selectedDate, selectedDesc)
     }
     
     //displays users dreams with title, date, and tags
@@ -186,6 +194,8 @@ function JournalComponent() {
     }, [])
 
     return (
+        <>
+        <DisplayedDream title={selectedTitle} date={selectedDate} dreamDesc={selectedDesc} />
         <div id='journal-component'>
             <section id='journal-input'>
                 <h1>Dream Journal</h1>
@@ -246,6 +256,7 @@ function JournalComponent() {
                 </div>
             </section>
         </div>
+        </>
     )
 }
 
