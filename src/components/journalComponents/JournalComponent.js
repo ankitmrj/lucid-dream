@@ -213,40 +213,44 @@ function JournalComponent() {
                 <div className='new-dream'>
                     {
                         dreamInputVisible ?
-                        <button onClick={discardDream}>Discard Dream</button> :
-                        <button onClick={toggleDreamText}>New Dream</button>}
+                        <button type='button' onClick={discardDream}>Discard Dream</button> :
+                        <button type='button' onClick={toggleDreamText}>New Dream</button>}
                     <div className='dream-text hidden'>
-                        <p>Title (optional): </p>
-                        <input 
-                            type='text' 
-                            value={dreamTitle}
-                            onChange={(e) => setDreamTitle(e.target.value)}
-                        />
-                        <p>Date:</p>
-                        <input 
-                            type='date' 
-                            value={dreamDate} 
-                            onChange={(e) => setDreamDate(e.target.value)}
-                        />
-                        <p>Dream:</p>
-                        <textarea 
-                            id='dream-textarea'
-                            rows='10' 
-                            cols='100'
-                            value={dreamText}
-                            onChange={(e) => setDreamText(e.target.value)}
-                        ></textarea>
-                        <p>Tags:</p>
-                        <input 
-                            type='text'
-                            value={createTag}
-                            onChange={(e) => setCreateTag(e.target.value)}
-                        />
-                        <button onClick={addNewTag}>+</button>
-                        <div className='tags'>
-                        </div>
-                        <button style={{marginBottom: '100px'}} onClick={submitNewDream}>Submit Dream</button>
-                        <button onClick={() => console.log(userDreams)}>ConsoleLog</button>
+                        <form onSubmit={(e) => {e.preventDefault()}}>
+                            <p><label htmlFor='title'>Title (optional): </label></p>
+                            <input
+                                id='title'
+                                type='text' 
+                                value={dreamTitle}
+                                onChange={(e) => setDreamTitle(e.target.value)}
+                            />
+                            <p><label htmlFor='date'>Date:</label></p>
+                            <input 
+                                id='date'
+                                type='date' 
+                                value={dreamDate} 
+                                onChange={(e) => setDreamDate(e.target.value)}
+                            />
+                            <p><label htmlFor='dream-textarea'>Dream:</label></p>
+                            <textarea 
+                                id='dream-textarea'
+                                rows='10' 
+                                cols='100'
+                                value={dreamText}
+                                onChange={(e) => setDreamText(e.target.value)}
+                            ></textarea>
+                            <p><label htmlFor='tags'>Tags:</label></p>
+                            <input 
+                                id='tags'
+                                type='text'
+                                value={createTag}
+                                onChange={(e) => setCreateTag(e.target.value)}
+                            />
+                            <button type='button' onClick={addNewTag}>+</button>
+                            <div className='tags'>
+                            </div>
+                            <button type='submit' style={{marginBottom: '100px'}} onClick={submitNewDream}>Submit Dream</button>
+                        </form>
                     </div>
                 </div>
             </section>
