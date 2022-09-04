@@ -7,11 +7,15 @@ function JournalComponent() {
 
     //represents if the dream menu is hidden or not
     const [dreamInputVisible, setDreamInputVisible] = useState(false);
+    //variable for title input field
     const [dreamTitle, setDreamTitle] = useState('');
+    //variable for date input field
     const [dreamDate, setDreamDate] = useState(new Date().toLocaleDateString('pt-br').split( '/' ).reverse( ).join( '-' )); //automatically sets to todays date
+    //variable for dream text field
     const [dreamText, setDreamText] = useState('');
     //default dream tags
     const [dreamTags, setDreamTags] = useState(['lucid', 'nightmare', 'semi-lucid', 'vivid']);
+    //variable for the new tag input field
     const [createTag, setCreateTag] = useState('');
     /*Dream object template in userDreams list
         title: dreamTitle,
@@ -20,7 +24,7 @@ function JournalComponent() {
         dreamDesc: dreamText
     */
     //list of dream objects with the above template
-    const [userDreams, setUserDreams] = useState([]);
+    const [userDreams, setUserDreams] = useState([]); //list of all user dreams
     const [selectedTitle, setSelectedTitle] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedDesc, setSelectedDesc] = useState('');
@@ -34,8 +38,10 @@ function JournalComponent() {
         dreamInput.classList.toggle('hidden')
     }
 
+    //adds event listener for each added dream for click function
     useEffect(() => {
         document.querySelectorAll('.dream').forEach(item => {
+            //checks if dream existed before a new dream was added
             if (item.getAttribute('added') === "true"){
 
             } else {
@@ -47,13 +53,14 @@ function JournalComponent() {
 
     //hides new dream menus and clears dream text
     const discardDream = () => {
+        //resets variables and hides menu
         toggleDreamText();
         setDreamText('');
         setDreamTitle('');
         
         for (let i in dreamCheckboxes){
             if (dreamCheckboxes[i].checked){
-                dreamCheckboxes[i].checked = false;
+                dreamCheckboxes[i].checked = false; //unchecks checked tags
             }
         }
     }
@@ -62,7 +69,7 @@ function JournalComponent() {
     const createDreamTag = (newTag) => {
         const tagsParent = document.querySelector('.tags');
 
-        //creats tag label and adds class
+        //creates tag label and adds class
         const tagLabel = document.createElement('label');
         tagLabel.classList.add('switch');
 
@@ -92,6 +99,7 @@ function JournalComponent() {
         }
     }
 
+    //toggler for clicked dream, hides/displays dream that user clicks
     const toggleVisibleDream = () => {
         if (isActive === 'none'){
             setIsActive('block');
@@ -101,20 +109,22 @@ function JournalComponent() {
     }
 
     const toggleDisplayedDream = (e) => {
+        //stores the name of the dream to search through list
         const searchTitle = e.target.id;
-        var clickedDream;
+        var clickedDream; //found dream, undefined for now
     
+        //filters through dreams in list until it finds the dream with searchTitle
         for (let dream in userDreams){
             if (userDreams[dream].title === searchTitle){
-                clickedDream = userDreams[dream];
+                clickedDream = userDreams[dream]; //saves found dream object to clickedDream
             }
         }
-        console.log(clickedDream)
+        console.log(clickedDream) //DEBUGGING
+        //sets variables to use as props
         setSelectedTitle(clickedDream.title);
         setSelectedDate(clickedDream.date);
         setSelectedDesc(clickedDream.dreamDesc);
-        setIsActive('block');
-        console.log(selectedTitle, selectedDate, selectedDesc)
+        setIsActive('block'); //When variables are set, this displays it
     }
     
     //displays users dreams with title, date, and tags
@@ -126,7 +136,6 @@ function JournalComponent() {
         const dreamParent = document.createElement('div');
         dreamParent.classList.add('dream');
         dreamParent.setAttribute('id', newDream.title);
-        //dreamParent.addEventListener('click', toggleDisplayedDream)
 
         //container for title and date for flexbox
         const dreamTitleParent = document.createElement('div');
@@ -167,6 +176,7 @@ function JournalComponent() {
 
     //add new tag to list as a checkbox
     const addNewTag = () => {
+        //checks if tag already exits
         if (!dreamTags.includes(createTag)){
             setDreamTags([...dreamTags, createTag]);
             createDreamTag(createTag);
@@ -174,15 +184,19 @@ function JournalComponent() {
         }
     }
 
+    //function to add dream to list
     const submitNewDream = () => {
+        //list for checked tags
         const activeDreamTags = [];
+        //loops through checkboxes and pushes checked tags to above list
         for (let i in dreamCheckboxes){
             if (dreamCheckboxes[i].checked){
                 activeDreamTags.push(dreamCheckboxes[i].value);
-                dreamCheckboxes[i].checked = false;
+                dreamCheckboxes[i].checked = false; //resets value
             }
         }
 
+        //creates new dream object
         const newDream = {
             title: dreamTitle, 
             tags: activeDreamTags, 
@@ -190,9 +204,10 @@ function JournalComponent() {
             dreamDesc: dreamText
         }
 
-        setUserDreams([...userDreams, newDream])
-        displayUserDreams(newDream);
+        setUserDreams([...userDreams, newDream])//adds dream to global dreams
+        displayUserDreams(newDream); //adds "dream card" to the DOM
 
+        //resets dream values
         toggleDreamText();
         setDreamText('');
         setDreamTitle('');

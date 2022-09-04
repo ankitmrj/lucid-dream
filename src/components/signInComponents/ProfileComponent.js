@@ -25,19 +25,31 @@ function ProfileComponent() {
         setUser(currentUser)
     })
 
+    const resetUserInputs = () => {
+        setRegisterEmail('');
+        setRegisterUsername('');
+        setRegisterPassword('');
+        setLoginEmail('');
+        setLoginPassword('');
+    }
+
     //registers user using email, username, and password
     const register = async () => {
         try {
-        const user = await createUserWithEmailAndPassword(auth, registerEmail, registerPassword);
-        updateProfile(auth.currentUser, {
-            displayName: registerUsername
-        })
-        setUser(user);
+            const user = await createUserWithEmailAndPassword(auth, registerEmail, registerPassword);
+
+            //creates username and adds it to firebase
+            updateProfile(auth.currentUser, {
+                displayName: registerUsername
+            })
+
+            setUser(user);
 
         } catch (error) {
-        console.log(error.message);
+            console.log(error.message);
         }
     }
+    //logs user in if they have an account
     const login = async () => {
         try {
             const user = await signInWithEmailAndPassword(
@@ -46,16 +58,22 @@ function ProfileComponent() {
                 loginPassword
             )
             setUser(user);
+            resetUserInputs();
 
         } catch (err) {
             console.log(err.message)
         }
     }
+
+    //logs user out
     const logout = async () => {
         await signOut(auth);
-        setUserAction('sign-in');
+        setUser({});
+        resetUserInputs();
+        //setUserAction('sign-in');
     }
-    if (!user){
+
+    if (user === null){
         if (userAction === 'sign-in'){
             return (
                 <div id='sign-in-component'>
@@ -89,7 +107,6 @@ function ProfileComponent() {
                         </div>
                     </section>
                 </div>
-                //<SignInComponent action={setUserAction} />
             )
         } else {
             return (
@@ -133,7 +150,6 @@ function ProfileComponent() {
                         </div>
                     </section>
                 </div>
-                //<SignUpComponent action={setUserAction} />
             )
         }
     }
