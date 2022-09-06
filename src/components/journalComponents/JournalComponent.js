@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import DisplayedDream from './DisplayedDream';
+import { db } from '../../firebase-config';
 import './Journal.css';
+import { set, ref, onValue } from 'firebase/database';
+import { uuidv4 } from '@firebase/util';
 
 function JournalComponent() {
     const dreamCheckboxes = document.querySelectorAll('.switch input');
+    const [initialDreams, setInitialDreams] = useState([]);
 
     //represents if the dream menu is hidden or not
     const [dreamInputVisible, setDreamInputVisible] = useState(false);
@@ -38,8 +42,7 @@ function JournalComponent() {
         dreamInput.classList.toggle('hidden')
     }
 
-    //adds event listener for each added dream for click function
-    useEffect(() => {
+    const clickFeatureDreams = () => {
         document.querySelectorAll('.dream').forEach(item => {
             //checks if dream existed before a new dream was added
             if (item.getAttribute('added') === "true"){
@@ -49,6 +52,11 @@ function JournalComponent() {
                 item.setAttribute('added', "true");
             }
         })
+    }
+
+    //adds event listener for each added dream for click function
+    useEffect(() => {
+        clickFeatureDreams();
     }, [userDreams])
 
     //hides new dream menus and clears dream text
@@ -207,6 +215,9 @@ function JournalComponent() {
         setUserDreams([...userDreams, newDream])//adds dream to global dreams
         displayUserDreams(newDream); //adds "dream card" to the DOM
 
+        const uuid = uuidv4()
+        set(ref(db, uuid), newDream)
+
         //resets dream values
         toggleDreamText();
         setDreamText('');
@@ -215,8 +226,18 @@ function JournalComponent() {
     }
 
     useEffect(() => {
+        onValue(ref(db), snapshot => {
+            const data = snapshot.val();
+            if (data !== null){
+                Object.values(data).map(dream => {
+                    setUserDreams(oldArray => [...oldArray, dream]);
+                })
+            }
+        })
         displayInitialDreamTags();
     }, [])
+
+    
 
     return (
         <>

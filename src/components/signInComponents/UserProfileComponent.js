@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import {UserAuth} from '../../context/AuthContext'
+import { UserAuth } from '../../context/AuthContext'
 
-function UserProfileComponent(props) {
+function UserProfileComponent() {
     const {user, logout} = UserAuth();
     const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ function UserProfileComponent(props) {
 
     return (
         <div>
-            {!user ? 
+            {!user ?
                 <p>Loading...</p>
                 :
                 <div>
