@@ -23,7 +23,8 @@ function UserProfileComponent(props) {
                 :
                 <div>
                     <h1>User</h1>
-                    {user ? <p>{user.email}</p> : <p>Loading...</p>}
+                    <p>{user.email}</p>
+                    <p>{user.displayName}</p>
                     <button onClick={handleLogout}>Logout</button>
                 </div>
             }

@@ -13,7 +13,7 @@ function HeaderComponent() {
             <Link to='/' ><img alt='home' src={home} className='icon' /></Link>
             <Link to='dream-journal'><img alt='Journal' src={journal} className='icon' /></Link>
             <img alt='Tools' src={tools} className='icon' />
-            <Link to='signup' ><img alt='Sign In' src={user} className='icon' /></Link>
+            <Link to='account' ><img alt='Sign In' src={user} className='icon' /></Link>
         </nav>
     </header>
   )

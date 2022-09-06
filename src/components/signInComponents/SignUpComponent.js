@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './Profile.css';
 import UserProfileComponent from './UserProfileComponent';
 import {UserAuth} from '../../context/AuthContext'
@@ -27,7 +27,7 @@ function ProfileComponent() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    const {createUser} = UserAuth();
+    const {createUser, updateUsername} = UserAuth();
     const navigate = useNavigate();
     
 
@@ -39,7 +39,8 @@ function ProfileComponent() {
         e.preventDefault();
         setError('');
         try{
-            await createUser(loginEmail, loginPassword);
+            await createUser(registerEmail, registerPassword);
+            await updateUsername(registerUsername);
             navigate('/account')
         } catch(e) {
             setError(e.message);
@@ -92,28 +93,24 @@ function ProfileComponent() {
         <div id='sign-in-component'>
             <section id='sign-in-section'>
                 <div className='sign-in-form'>
-                {userAction === 'sign-in' ? <h1>Sign In</h1> : <h1>Sign Up</h1>}
+                <h1>Sign Up</h1>
                     <form className='form' onSubmit={handleSubmit}>
-                        {userAction === 'sign-up' ?
-                            <div className='input'>
-                            <label htmlFor='username'>Username:</label>
-                            <input 
-                                id='username' 
-                                name='username' 
-                                type='text'
-                                onChange={(e) => {setRegisterUsername(e.target.value)}} 
-                            />
-                            </div>
-                            :
-                            null
-                        }
+                        <div className='input'>
+                        <label htmlFor='username'>Username:</label>
+                        <input 
+                            id='username' 
+                            name='username' 
+                            type='text'
+                            onChange={(e) => {setRegisterUsername(e.target.value)}} 
+                        />
+                        </div>
                         <div className='input'>
                         <label htmlFor='email'>Email:</label>
                         <input 
                             id='email' 
                             name='email' 
                             type='email'
-                            onChange={(e) => {setLoginEmail(e.target.value)}} 
+                            onChange={(e) => {setRegisterEmail(e.target.value)}} 
                         />
                         </div>
                         <div className='input'>
@@ -122,20 +119,14 @@ function ProfileComponent() {
                             id='password' 
                             name='password' 
                             type='password'
-                            onChange={(e) => {setLoginPassword(e.target.value)}} 
+                            onChange={(e) => {setRegisterPassword(e.target.value)}} 
                         />
                         </div>
                         <div className='sign-in-actions'>
-                        {userAction === 'sign-in' ? 
-                            <button id='sign-in-button'>Sign In</button>
-                            :
-                            <button id='sign-in-button'>Sign Up</button>
-                        }
-                        {userAction === 'sign-in' ? 
-                            <button className='sign-up-text' onClick={toggleUserAction}>Don't have an account? Sign Up</button>
-                            :
-                            <button className='sign-up-text' onClick={toggleUserAction}>Already have an account? Sign In</button>
-                        }
+                        <button id='sign-in-button'>Sign Up</button>
+                        <Link to='/signin' className='sign-up-text'>
+                            Already have an account? Sign In
+                        </Link>
                         </div>
                     </form>
                 </div>
