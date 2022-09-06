@@ -9,12 +9,13 @@ html {
     height: 100%;
 }
 body {
-    overflow: auto;
-    height: 100%;
+    min-height: 100%;
     margin-right: 60px;
 }
 #root {
-    min-height: 100%;
+    min-height: 100vh;
+    height: 100%;
+    position: relative;
 }
 :root {
     --background-color: #E8EBF4;
@@ -29,6 +30,7 @@ body {
 }
 #footer {
     display: block;
-    height: 250px;
-    position: relative;
+    height: 220px;
+    width: 100%;
+    bottom: 0;
 }

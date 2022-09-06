@@ -24,7 +24,7 @@ function SignInComponent() {
     
     return (
         <div id='sign-in-component'>
-            <section id='sign-in-section'>
+            <div id='sign-in-section'>
                 <div className='sign-in-form'>
                 <h1>Sign In</h1>
                     <form className='form' onSubmit={handleSubmit}>
@@ -54,7 +54,7 @@ function SignInComponent() {
                         </div>
                     </form>
                 </div>
-            </section>
+            </div>
         </div>
     )
 }

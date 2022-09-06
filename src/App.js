@@ -11,20 +11,19 @@ import ProtectedRoute from "./components/signInComponents/ProtectedRoute";
 
 
 function App() {
+
   return (
     <AuthContextProvider>
       <BrowserRouter>
         <HeaderComponent/>
         <Routes>
           <Route path='/' element={<LandingComponent/>} />
-          <Route path='signup' element={<SignUpComponent />}/>
-          <Route path='signin' element={<SignInComponent />}/>
           <Route path='dream-journal' element={<JournalComponent/>}/>
           <Route path='account' element={<ProtectedRoute><UserProfileComponent /></ProtectedRoute>}/>
+          <Route path='signup' element={<SignUpComponent/>}/>
+          <Route path='signin' element={<SignInComponent/>}/>
         </Routes>
-        <div id='footer'>
-          <FooterComponent/>
-        </div>
+        <FooterComponent/>
       </BrowserRouter>
     </AuthContextProvider>
   );

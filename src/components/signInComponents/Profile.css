@@ -1,4 +1,5 @@
 #sign-in-component {
+    position: absolute;
     width: 100%;
     height: 100%;
     background-image: linear-gradient(to right top, #231032, #2e1541, #391b51, #452062, #512673);
@@ -16,7 +17,8 @@
     align-items: center;
 }
 .sign-in-form {
-    width: 500px;
+    max-width: 500px;
+    width: 80%;
     background-color: var(--background-color);
     height: 500px;
     border-radius: 5px;

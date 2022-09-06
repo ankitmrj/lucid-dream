@@ -1,91 +1,32 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './Profile.css';
-import UserProfileComponent from './UserProfileComponent';
 import {UserAuth} from '../../context/AuthContext'
-import { auth } from '../../firebase-config';
-import { 
-    createUserWithEmailAndPassword, 
-    updateProfile, 
-    onAuthStateChanged, 
-    signOut, 
-    signInWithEmailAndPassword
-} from 'firebase/auth';
 
 function ProfileComponent() {
     //USER VARIABLES
-    const [user, setUser] = useState({});
-    const [userAction, setUserAction] = useState('sign-in');
-    //REGISTER USER VARIABLES
     const [registerUsername, setRegisterUsername] = useState('');
     const [registerEmail, setRegisterEmail] = useState('');
     const [registerPassword, setRegisterPassword] = useState('');
-    //LOGIN USER VARIABLES
-    const [loginEmail, setLoginEmail] = useState('');
-    const [loginPassword, setLoginPassword] = useState('');
-    //Loading and error variables for user feedback
-    const [loading, setLoading] = useState(true);
+    //Error variable for user feedback
     const [error, setError] = useState('');
 
+    //imports the create user and update username from auth context
     const {createUser, updateUsername} = UserAuth();
-    const navigate = useNavigate();
-    
+    const navigate = useNavigate(); //navigate for when you want to switch user action
 
-    const toggleUserAction = () => {
-        userAction === 'sign-in' ? setUserAction('sign-up') : setUserAction('sign-in');
-    }
-
+    //logic for when user clicks button or presses enter
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
         try{
+            //creates user and updates username 
             await createUser(registerEmail, registerPassword);
             await updateUsername(registerUsername);
-            navigate('/account')
+            navigate('/account'); //sends user to their account page
         } catch(e) {
             setError(e.message);
             console.log(e.message)
-        }
-    }
-
-    const resetUserInputs = () => {
-        setRegisterEmail('');
-        setRegisterUsername('');
-        setRegisterPassword('');
-        setLoginEmail('');
-        setLoginPassword('');
-    }
-
-    //registers user using email, username, and password
-    const register = async () => {
-        try {
-            const user = await createUserWithEmailAndPassword(auth, registerEmail, registerPassword);
-
-            //creates username and adds it to firebase
-            updateProfile(auth.currentUser, {
-                displayName: registerUsername
-            })
-
-            setUser(user);
-            resetUserInputs();
-
-        } catch (error) {
-            console.log(error.message);
-        }
-    }
-    //logs user in if they have an account
-    const login = async () => {
-        try {
-            const user = await signInWithEmailAndPassword(
-                auth,
-                loginEmail,
-                loginPassword
-            )
-            setUser(user);
-            resetUserInputs();
-
-        } catch (err) {
-            console.log(err.message)
         }
     }
 
