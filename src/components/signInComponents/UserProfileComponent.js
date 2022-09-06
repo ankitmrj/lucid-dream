@@ -1,14 +1,33 @@
-import React from 'react';
-import { auth } from '../../firebase-config';
-import { signOut } from 'firebase/auth';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {UserAuth} from '../../context/AuthContext'
 
 function UserProfileComponent(props) {
-    const logout = async () => {
-        await signOut(auth);
+    const {user, logout} = UserAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+            navigate('/signup');
+            console.log('user logged out')
+        } catch(e) {
+            console.log(e.message);
+        }
     }
 
     return (
-        <div>USER ACCOUNT</div>
+        <div>
+            {!user ? 
+                <p>Loading...</p>
+                :
+                <div>
+                    <h1>User</h1>
+                    {user ? <p>{user.email}</p> : <p>Loading...</p>}
+                    <button onClick={handleLogout}>Logout</button>
+                </div>
+            }
+        </div>
     );
 }
 

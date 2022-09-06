@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Profile.css';
-import UserProfileComponent from './UserProfileComponent'
+import UserProfileComponent from './UserProfileComponent';
+import {UserAuth} from '../../context/AuthContext'
 import { auth } from '../../firebase-config';
 import { 
     createUserWithEmailAndPassword, 
@@ -25,8 +27,24 @@ function ProfileComponent() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
+    const {createUser} = UserAuth();
+    const navigate = useNavigate();
+    
+
     const toggleUserAction = () => {
         userAction === 'sign-in' ? setUserAction('sign-up') : setUserAction('sign-in');
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        try{
+            await createUser(loginEmail, loginPassword);
+            navigate('/account')
+        } catch(e) {
+            setError(e.message);
+            console.log(e.message)
+        }
     }
 
     const resetUserInputs = () => {
@@ -75,7 +93,7 @@ function ProfileComponent() {
             <section id='sign-in-section'>
                 <div className='sign-in-form'>
                 {userAction === 'sign-in' ? <h1>Sign In</h1> : <h1>Sign Up</h1>}
-                    <div className='form'>
+                    <form className='form' onSubmit={handleSubmit}>
                         {userAction === 'sign-up' ?
                             <div className='input'>
                             <label htmlFor='username'>Username:</label>
@@ -109,9 +127,9 @@ function ProfileComponent() {
                         </div>
                         <div className='sign-in-actions'>
                         {userAction === 'sign-in' ? 
-                            <button id='sign-in-button' onClick={login}>Sign In</button>
+                            <button id='sign-in-button'>Sign In</button>
                             :
-                            <button id='sign-in-button' onClick={register}>Sign Up</button>
+                            <button id='sign-in-button'>Sign Up</button>
                         }
                         {userAction === 'sign-in' ? 
                             <button className='sign-up-text' onClick={toggleUserAction}>Don't have an account? Sign Up</button>
@@ -119,7 +137,7 @@ function ProfileComponent() {
                             <button className='sign-up-text' onClick={toggleUserAction}>Already have an account? Sign In</button>
                         }
                         </div>
-                    </div>
+                    </form>
                 </div>
             </section>
         </div>
