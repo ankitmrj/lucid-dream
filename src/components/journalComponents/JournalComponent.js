@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import DisplayedDream from './DisplayedDream';
-import { db } from '../../firebase-config';
-import './Journal.css';
 import { set, ref, onValue, remove } from 'firebase/database';
 import { uuidv4 } from '@firebase/util';
+import { db } from '../../firebase-config';
+
+import DisplayedDream from './DisplayedDream';
+import './Journal.css';
 
 function JournalComponent() {
     const dreamCheckboxes = document.querySelectorAll('.switch input');
@@ -15,22 +16,19 @@ function JournalComponent() {
     const [dreamDate, setDreamDate] = useState(new Date().toLocaleDateString('pt-br').split( '/' ).reverse( ).join( '-' )); //automatically sets to todays date
     //variable for dream text field
     const [dreamText, setDreamText] = useState('');
-    //default dream tags
+    //dream tag variables
     const [dreamTags, setDreamTags] = useState(['lucid', 'nightmare', 'semi-lucid', 'vivid']);
-    //variable for the new tag input field
     const [createTag, setCreateTag] = useState('');
-    /*Dream object template in userDreams list
-        title: dreamTitle,
-        tags: dreamTags,
-        date: dreamDate,
-        dreamDesc: dreamText
-    */
-    //list of dream objects with the above template
+    const [isActive, setIsActive] = useState('none'); //if tag input is checked
+    //list of dream object value variables
     const [userDreams, setUserDreams] = useState([]); //list of all user dreams
     const [selectedTitle, setSelectedTitle] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedDesc, setSelectedDesc] = useState('');
-    const [isActive, setIsActive] = useState('none');
+
+    const [toEditDream, setToEditDream] = useState({});
+    const [isEdit, setIsEdit] = useState(false);
+    const [tempUuid, setTempUuid] = useState('');
 
     //renders initial dreams from database
     useEffect(() => {
@@ -111,10 +109,8 @@ function JournalComponent() {
         }
     }
 
-    //finds dream user clicks and displays it in a readable format
-    const toggleDisplayedDream = (e) => {
-        //stores the name of the dream to search through list
-        const searchTitle = e.target.id;
+    const findClickedDream = (dreamToFind) => {
+        const searchTitle = dreamToFind;
         var clickedDream; //found dream, undefined for now
     
         //filters through dreams in list until it finds the dream with searchTitle
@@ -123,6 +119,12 @@ function JournalComponent() {
                 clickedDream = userDreams[dream]; //saves found dream object to clickedDream
             }
         }
+        return clickedDream;
+    }
+
+    //finds dream user clicks and displays it in a readable format
+    const toggleDisplayedDream = (e) => {
+        const clickedDream = findClickedDream(e.target.id);
 
         //sets variables to use as props
         setSelectedTitle(clickedDream.title);
@@ -181,6 +183,14 @@ function JournalComponent() {
         remove(ref(db, `/${dream.uuid}`))
     }
 
+    const handleUpdate = (dream) => {
+        const clickedDream = findClickedDream(dream.title);
+        setToEditDream(clickedDream)
+        setTempUuid(dream.uuid);
+        setIsEdit(true);
+
+    }
+
     return (
         <>
         <DisplayedDream title={selectedTitle} date={selectedDate} dreamDesc={selectedDesc} active={isActive} toggleActive={toggleVisibleDream} />
@@ -195,12 +205,13 @@ function JournalComponent() {
                         <button type='button' onClick={toggleDreamText}>New Dream</button>}
                     <div className='dream-text hidden'>
                         <form onSubmit={submitNewDream}>
-                            <p><label htmlFor='title'>Title (optional): </label></p>
+                            <p><label htmlFor='title'>Title: </label></p>
                             <input
                                 id='title'
                                 type='text' 
                                 value={dreamTitle}
                                 onChange={(e) => setDreamTitle(e.target.value)}
+                                required
                             />
                             <p><label htmlFor='date'>Date:</label></p>
                             <input 
@@ -208,6 +219,7 @@ function JournalComponent() {
                                 type='date' 
                                 value={dreamDate} 
                                 onChange={(e) => setDreamDate(e.target.value)}
+                                required
                             />
                             <p><label htmlFor='dream-textarea'>Dream:</label></p>
                             <textarea 
@@ -216,6 +228,7 @@ function JournalComponent() {
                                 cols='100'
                                 value={dreamText}
                                 onChange={(e) => setDreamText(e.target.value)}
+                                required
                             ></textarea>
                             <p><label htmlFor='tags'>Tags:</label></p>
                             <input 
@@ -231,6 +244,7 @@ function JournalComponent() {
                         </form>
                     </div>
                 </div>
+                
             </section>
             <section style={{marginBottom: '100px'}} id='user-dreams'>
                 <h1>Dreams:</h1>
@@ -257,10 +271,43 @@ function JournalComponent() {
                                     <p key={index}>{tag}</p>
                                 ))}
                             </div>
+                            
                         </div>
                         <button key={index + 10} onClick={() => handleDelete(dream)}>Delete</button>
+                        <button id={dream.title} key={index + 7} onClick={() => handleUpdate(dream)}>Edit</button>
                         </>
                     ))}
+                    {isEdit ? 
+                    <div>
+                        <input type='text' value={toEditDream.title} />
+                        <input type='date' value={toEditDream.date} />
+                        <textarea value={toEditDream.dreamDesc}></textarea>
+                        <p><label htmlFor='tags'>Tags:</label></p>
+                        <input 
+                            id='tags'
+                            type='text'
+                            value={createTag}
+                            onChange={(e) => setCreateTag(e.target.value)}
+                        />
+                        <button type='button' onClick={addNewTag}>+</button>
+                        <div className='edit-tags'>
+                            {toEditDream.tags.map((tag) => {
+                                if (dreamTags.includes(tag)){}
+                                else {
+                                    setDreamTags([...dreamTags, tag])
+                                }
+                            })}
+                            {dreamTags.map((tag) => (
+                                <label className='switch'>
+                                    <input value={tag} type='checkbox' id={tag} name={tag} />
+                                    <span className='slider'>{tag}</span>
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+                    :
+                    null
+                    }
                 </div>
             </section>
         </div>
