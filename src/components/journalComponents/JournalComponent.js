@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import DisplayedDream from './DisplayedDream';
 import { db } from '../../firebase-config';
 import './Journal.css';
-import { set, ref, onValue, get } from 'firebase/database';
+import { set, ref, onValue, remove } from 'firebase/database';
 import { uuidv4 } from '@firebase/util';
 
 function JournalComponent() {
@@ -32,14 +32,7 @@ function JournalComponent() {
     const [selectedDesc, setSelectedDesc] = useState('');
     const [isActive, setIsActive] = useState('none');
 
-    //toggles dream menu 
-    const toggleDreamText = () => {
-        setDreamInputVisible(dreamInputVisible ? false : true);
-        const dreamInput = document.querySelector('.dream-text');
-
-        dreamInput.classList.toggle('hidden')
-    }
-
+    //renders initial dreams from database
     useEffect(() => {
         onValue(ref(db), (snapshot) => {
             setUserDreams([])
@@ -53,19 +46,13 @@ function JournalComponent() {
         displayInitialDreamTags();
     }, [])
 
-    const clickFeatureDreams = () => {
-        document.querySelectorAll('.dream').forEach(item => {
-            //checks if dream existed before a new dream was added
-            if (item.getAttribute('added') === "true"){
+    //toggles dream menu 
+    const toggleDreamText = () => {
+        setDreamInputVisible(dreamInputVisible ? false : true);
+        const dreamInput = document.querySelector('.dream-text');
 
-            } else {
-                item.addEventListener('click', toggleDisplayedDream);
-                item.setAttribute('added', "true");
-            }
-        })
+        dreamInput.classList.toggle('hidden')
     }
-
-    //adds event listener for each added dream for click function
 
     //hides new dream menus and clears dream text
     const discardDream = () => {
@@ -124,6 +111,7 @@ function JournalComponent() {
         }
     }
 
+    //finds dream user clicks and displays it in a readable format
     const toggleDisplayedDream = (e) => {
         //stores the name of the dream to search through list
         const searchTitle = e.target.id;
@@ -142,53 +130,6 @@ function JournalComponent() {
         setSelectedDesc(clickedDream.dreamDesc);
         setIsActive('block'); //When variables are set, this displays it
     }
-    
-    //displays users dreams with title, date, and tags
-    const displayUserDreams = (newDream) => {
-        //parent element of all user dreams
-        const displayedDreams = document.querySelector('.displayed-dreams');
-
-        //container for dream title, date, and tags
-        const dreamParent = document.createElement('div');
-        dreamParent.classList.add('dream');
-        dreamParent.setAttribute('id', newDream.title);
-
-        //container for title and date for flexbox
-        const dreamTitleParent = document.createElement('div');
-        dreamTitleParent.classList.add('user-dream-title');
-
-        //dream title
-        const dreamTitleText = document.createElement('h2');
-        dreamTitleText.innerHTML = newDream.title;
-
-        //dream date
-        const dreamDateText = document.createElement('h4');
-        dreamDateText.innerHTML = newDream.date;
-
-        //appends all elements to parents
-        dreamParent.appendChild(dreamTitleParent);
-        dreamTitleParent.appendChild(dreamTitleText);
-        dreamTitleParent.appendChild(dreamDateText);
-
-        //dream tag container
-        const dreamTagsParent = document.createElement('div');
-        dreamTagsParent.classList.add('user-dream-tags');
-
-        //loops through tags and creates p element for each one
-        for (let i in newDream.tags){
-            //p element for tag
-            const dreamTagText = document.createElement('p');
-            dreamTagText.classList.add('user-dream-tag');
-            
-            //sets tag text and adds to container
-            dreamTagText.innerHTML = newDream.tags[i];
-            dreamTagsParent.appendChild(dreamTagText);
-        }
-
-        //appends both divs to main dream container
-        dreamParent.appendChild(dreamTagsParent);
-        displayedDreams.appendChild(dreamParent);
-    }
 
     //add new tag to list as a checkbox
     const addNewTag = () => {
@@ -203,6 +144,9 @@ function JournalComponent() {
     //function to add dream to list
     const submitNewDream = (e) => {
         e.preventDefault();
+
+        //random uuid to identify item
+        const uuid = uuidv4()
         //list for checked tags
         const activeDreamTags = [];
         //loops through checkboxes and pushes checked tags to above list
@@ -218,13 +162,11 @@ function JournalComponent() {
             title: dreamTitle, 
             tags: activeDreamTags, 
             date: dreamDate, 
-            dreamDesc: dreamText
+            dreamDesc: dreamText,
+            uuid
         }
 
         setUserDreams(oldDreams => [...oldDreams, newDream])//adds dream to global dreams
-        //displayUserDreams(newDream); //adds "dream card" to the DOM
-
-        const uuid = uuidv4()
         set(ref(db, `/${uuid}`), newDream)
 
         //resets dream values
@@ -234,9 +176,10 @@ function JournalComponent() {
 
     }
 
-    
-
-    
+    //removes dream from database
+    const handleDelete = (dream) => {
+        remove(ref(db, `/${dream.uuid}`))
+    }
 
     return (
         <>
@@ -303,6 +246,7 @@ function JournalComponent() {
                         </div>
                     </div>
                     {userDreams.map((dream, index) => (
+                        <>
                         <div key={index} className='dream' id={dream.title} onClick={toggleDisplayedDream}>
                             <div className='user-dream-title'>
                                 <h2>{dream.title}</h2>
@@ -314,6 +258,8 @@ function JournalComponent() {
                                 ))}
                             </div>
                         </div>
+                        <button key={index + 10} onClick={() => handleDelete(dream)}>Delete</button>
+                        </>
                     ))}
                 </div>
             </section>
