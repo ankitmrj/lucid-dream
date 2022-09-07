@@ -188,7 +188,6 @@ function JournalComponent() {
         setToEditDream(clickedDream)
         setTempUuid(dream.uuid);
         setIsEdit(true);
-
     }
 
     return (
@@ -279,31 +278,43 @@ function JournalComponent() {
                     ))}
                     {isEdit ? 
                     <div>
-                        <input type='text' value={toEditDream.title} />
-                        <input type='date' value={toEditDream.date} />
-                        <textarea value={toEditDream.dreamDesc}></textarea>
-                        <p><label htmlFor='tags'>Tags:</label></p>
-                        <input 
-                            id='tags'
-                            type='text'
-                            value={createTag}
-                            onChange={(e) => setCreateTag(e.target.value)}
-                        />
-                        <button type='button' onClick={addNewTag}>+</button>
-                        <div className='edit-tags'>
-                            {toEditDream.tags.map((tag) => {
-                                if (dreamTags.includes(tag)){}
-                                else {
-                                    setDreamTags([...dreamTags, tag])
-                                }
-                            })}
-                            {dreamTags.map((tag) => (
-                                <label className='switch'>
-                                    <input value={tag} type='checkbox' id={tag} name={tag} />
-                                    <span className='slider'>{tag}</span>
-                                </label>
-                            ))}
-                        </div>
+                        <form >
+                            <input type='text' value={toEditDream.title} onChange={e => setToEditDream(prev => ({...prev, title: e.target.value}))} />
+
+                            <input type='date' value={toEditDream.date} onChange={e => setToEditDream(prev => ({...prev, date: e.target.value}))} />
+
+                            <textarea value={toEditDream.dreamDesc} onChange={e => setToEditDream(prev => ({...prev, dreamDesc: e.target.value}))}></textarea>
+                            
+                            <p><label htmlFor='tags'>Tags:</label></p>
+                            <input 
+                                id='tags'
+                                type='text'
+                                value={createTag}
+                                onChange={(e) => setCreateTag(e.target.value)}
+                            />
+                            <button type='button' onClick={addNewTag}>+</button>
+                            <div className='edit-tags'>
+                                {toEditDream.tags.forEach(tag => {
+                                    if (dreamTags.includes(tag)){}
+                                    else {
+                                        setDreamTags([...dreamTags, tag])
+                                    }
+                                })}
+                                {dreamTags.map((tag) => (
+                                    <label className='switch'>
+                                        <input 
+                                            value={tag} 
+                                            type='checkbox' 
+                                            id={tag} 
+                                            name={tag} 
+                                            defaultChecked={toEditDream.tags.includes(tag) ? 'checked' : ''}
+                                        />
+                                        <span className='slider'>{tag}</span>
+                                    </label>
+                                ))}
+                            </div>
+                            <button type='submit'>Finish Editing</button>
+                        </form>
                     </div>
                     :
                     null
