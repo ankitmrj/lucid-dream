@@ -302,15 +302,15 @@ function JournalComponent() {
                             <p className='user-dream-tag'>Vivid</p>
                         </div>
                     </div>
-                    {userDreams.map((dream) => (
-                        <div className='dream' id={dream.title} onClick={toggleDisplayedDream}>
+                    {userDreams.map((dream, index) => (
+                        <div key={index} className='dream' id={dream.title} onClick={toggleDisplayedDream}>
                             <div className='user-dream-title'>
                                 <h2>{dream.title}</h2>
                                 <h4>{dream.date}</h4>
                             </div>
                             <div className='user-dream-tags'>
-                                {dream.tags.map((tag) => (
-                                    <p>{tag}</p>
+                                {dream.tags.map((tag, index) => (
+                                    <p key={index}>{tag}</p>
                                 ))}
                             </div>
                         </div>
