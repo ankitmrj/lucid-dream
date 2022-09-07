@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react';
 import DisplayedDream from './DisplayedDream';
 import { db } from '../../firebase-config';
 import './Journal.css';
-import { set, ref, onValue } from 'firebase/database';
+import { set, ref, onValue, get } from 'firebase/database';
 import { uuidv4 } from '@firebase/util';
 
 function JournalComponent() {
     const dreamCheckboxes = document.querySelectorAll('.switch input');
-    const [initialDreams, setInitialDreams] = useState([]);
-
     //represents if the dream menu is hidden or not
     const [dreamInputVisible, setDreamInputVisible] = useState(false);
     //variable for title input field
@@ -42,6 +40,19 @@ function JournalComponent() {
         dreamInput.classList.toggle('hidden')
     }
 
+    useEffect(() => {
+        onValue(ref(db), (snapshot) => {
+            setUserDreams([])
+            const data = snapshot.val();
+            if (data !== null){
+                Object.values(data).forEach(dream => {
+                    setUserDreams(oldArray => [...oldArray, dream]);
+                })
+            }
+        })
+        displayInitialDreamTags();
+    }, [])
+
     const clickFeatureDreams = () => {
         document.querySelectorAll('.dream').forEach(item => {
             //checks if dream existed before a new dream was added
@@ -55,9 +66,6 @@ function JournalComponent() {
     }
 
     //adds event listener for each added dream for click function
-    useEffect(() => {
-        clickFeatureDreams();
-    }, [userDreams])
 
     //hides new dream menus and clears dream text
     const discardDream = () => {
@@ -127,7 +135,7 @@ function JournalComponent() {
                 clickedDream = userDreams[dream]; //saves found dream object to clickedDream
             }
         }
-        console.log(clickedDream) //DEBUGGING
+
         //sets variables to use as props
         setSelectedTitle(clickedDream.title);
         setSelectedDate(clickedDream.date);
@@ -193,7 +201,8 @@ function JournalComponent() {
     }
 
     //function to add dream to list
-    const submitNewDream = () => {
+    const submitNewDream = (e) => {
+        e.preventDefault();
         //list for checked tags
         const activeDreamTags = [];
         //loops through checkboxes and pushes checked tags to above list
@@ -212,11 +221,11 @@ function JournalComponent() {
             dreamDesc: dreamText
         }
 
-        setUserDreams([...userDreams, newDream])//adds dream to global dreams
-        displayUserDreams(newDream); //adds "dream card" to the DOM
+        setUserDreams(oldDreams => [...oldDreams, newDream])//adds dream to global dreams
+        //displayUserDreams(newDream); //adds "dream card" to the DOM
 
         const uuid = uuidv4()
-        set(ref(db, uuid), newDream)
+        set(ref(db, `/${uuid}`), newDream)
 
         //resets dream values
         toggleDreamText();
@@ -225,17 +234,7 @@ function JournalComponent() {
 
     }
 
-    useEffect(() => {
-        onValue(ref(db), snapshot => {
-            const data = snapshot.val();
-            if (data !== null){
-                Object.values(data).map(dream => {
-                    setUserDreams(oldArray => [...oldArray, dream]);
-                })
-            }
-        })
-        displayInitialDreamTags();
-    }, [])
+    
 
     
 
@@ -252,7 +251,7 @@ function JournalComponent() {
                         <button type='button' onClick={discardDream}>Discard Dream</button> :
                         <button type='button' onClick={toggleDreamText}>New Dream</button>}
                     <div className='dream-text hidden'>
-                        <form onSubmit={(e) => {e.preventDefault()}}>
+                        <form onSubmit={submitNewDream}>
                             <p><label htmlFor='title'>Title (optional): </label></p>
                             <input
                                 id='title'
@@ -285,7 +284,7 @@ function JournalComponent() {
                             <button type='button' onClick={addNewTag}>+</button>
                             <div className='tags'>
                             </div>
-                            <button type='submit' style={{marginBottom: '100px'}} onClick={submitNewDream}>Submit Dream</button>
+                            <button type='submit' style={{marginBottom: '100px'}}>Submit Dream</button>
                         </form>
                     </div>
                 </div>
@@ -303,6 +302,19 @@ function JournalComponent() {
                             <p className='user-dream-tag'>Vivid</p>
                         </div>
                     </div>
+                    {userDreams.map((dream) => (
+                        <div className='dream' id={dream.title} onClick={toggleDisplayedDream}>
+                            <div className='user-dream-title'>
+                                <h2>{dream.title}</h2>
+                                <h4>{dream.date}</h4>
+                            </div>
+                            <div className='user-dream-tags'>
+                                {dream.tags.map((tag) => (
+                                    <p>{tag}</p>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </section>
         </div>
