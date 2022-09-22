@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { set, ref, onValue, remove } from 'firebase/database';
 import { uuidv4 } from '@firebase/util';
 import { db } from '../../firebase-config';
 
 import DisplayedDream from './DisplayedDream';
 import './Journal.css';
+import { UserAuth } from '../../context/AuthContext';
 
 function JournalComponent() {
     const dreamCheckboxes = document.querySelectorAll('.switch input');
@@ -29,18 +30,29 @@ function JournalComponent() {
     const [toEditDream, setToEditDream] = useState({});
     const [isEdit, setIsEdit] = useState(false);
     const [tempUuid, setTempUuid] = useState('');
+    const {user} = UserAuth();
+
+    const fetchDreams = async () => {
+        setTimeout(() => {
+            onValue(ref(db), (snapshot) => {
+                setUserDreams([])
+                let uid = user.uid;
+                let data = snapshot.val();
+                if (data !== null){
+                    Object.values(data[uid].dreams).forEach(dream => {
+                        setUserDreams(oldArray => [...oldArray, dream]);
+                    })
+                }
+                
+            })
+        }, 500)
+        
+    }
 
     //renders initial dreams from database
-    useEffect(() => {
-        onValue(ref(db), (snapshot) => {
-            setUserDreams([])
-            const data = snapshot.val();
-            if (data !== null){
-                Object.values(data).forEach(dream => {
-                    setUserDreams(oldArray => [...oldArray, dream]);
-                })
-            }
-        })
+    useEffect( () => {
+        
+        fetchDreams();
         displayInitialDreamTags();
     }, [])
 
@@ -135,10 +147,12 @@ function JournalComponent() {
 
     //add new tag to list as a checkbox
     const addNewTag = () => {
+        const uuid = uuidv4()
         //checks if tag already exits
         if (!dreamTags.includes(createTag)){
             setDreamTags([...dreamTags, createTag]);
             createDreamTag(createTag);
+            set(ref(db, `${user.uid}/tags/${uuid}`), createTag)
             setCreateTag('');
         }
     }
@@ -151,6 +165,7 @@ function JournalComponent() {
         const uuid = uuidv4()
         //list for checked tags
         const activeDreamTags = [];
+        
         //loops through checkboxes and pushes checked tags to above list
         for (let i in dreamCheckboxes){
             if (dreamCheckboxes[i].checked){
@@ -169,7 +184,7 @@ function JournalComponent() {
         }
 
         setUserDreams(oldDreams => [...oldDreams, newDream])//adds dream to global dreams
-        set(ref(db, `/${uuid}`), newDream)
+        set(ref(db, `${user.uid}/dreams/${uuid}`), newDream)
 
         //resets dream values
         toggleDreamText();

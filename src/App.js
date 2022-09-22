@@ -18,7 +18,7 @@ function App() {
         <HeaderComponent/>
         <Routes>
           <Route path='/' element={<LandingComponent/>} />
-          <Route path='dream-journal' element={<JournalComponent/>}/>
+          <Route path='dream-journal' element={<ProtectedRoute><JournalComponent/></ProtectedRoute>}/>
           <Route path='account' element={<ProtectedRoute><UserProfileComponent /></ProtectedRoute>}/>
           <Route path='signup' element={<SignUpComponent/>}/>
           <Route path='signin' element={<SignInComponent/>}/>
