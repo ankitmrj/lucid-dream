@@ -31,13 +31,6 @@ function JournalComponent() {
     // const [isEdit, setIsEdit] = useState(false);
     const {user} = UserAuth();
 
-    const fetchDreams = () => {
-        setTimeout(() => {
-            
-        }, 500)
-        
-    }
-
     //renders initial dreams from database
     useEffect(() => {
         const dbRef = ref(getDatabase())
@@ -65,8 +58,6 @@ function JournalComponent() {
                 })
             }
         })
-
-        fetchDreams();
         // eslint-disable-next-line
     }, [])
 
@@ -99,19 +90,6 @@ function JournalComponent() {
             setIsActive('none');
         }
     }
-
-    // const findClickedDream = (dreamToFind) => {
-    //     const searchTitle = dreamToFind;
-    //     var clickedDream; //found dream, undefined for now
-    
-    //     //filters through dreams in list until it finds the dream with searchTitle
-    //     for (let dream in userDreams){
-    //         if (userDreams[dream].title === searchTitle){
-    //             clickedDream = userDreams[dream]; //saves found dream object to clickedDream
-    //         }
-    //     }
-    //     return clickedDream;
-    // }
 
     //finds dream user clicks and displays it in a readable format
     const toggleDisplayedDream = (dream) => {
