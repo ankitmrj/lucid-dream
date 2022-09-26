@@ -33,23 +33,27 @@ function JournalComponent() {
 
     const fetchDreams = () => {
         setTimeout(() => {
-            onValue(ref(db), (snapshot) => {
-                setUserDreams([])
-                let uid = user.uid;
-                let data = snapshot.val();
-                if (data !== null){
-                    Object.values(data[uid].dreams).forEach(dream => {
-                        setUserDreams(oldArray => [...oldArray, dream]);
-                    })
-                }
-                
-            })
+            
         }, 500)
         
     }
 
     //renders initial dreams from database
     useEffect( () => {
+        onValue(ref(db), (snapshot) => {
+            setUserDreams([])
+            let uid = user.uid;
+            let data = snapshot.val();
+            console.log(typeof data)
+            console.log(data)
+            if (data !== null){
+                Object.values(data[user.uid].dreams).forEach(dream => {
+                    setUserDreams(oldArray => [...oldArray, dream]);
+                })
+            }
+            
+        })
+
         fetchDreams();
         // eslint-disable-next-line
     }, [])
