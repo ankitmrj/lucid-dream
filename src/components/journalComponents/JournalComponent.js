@@ -59,7 +59,7 @@ function JournalComponent() {
             }
         })
         // eslint-disable-next-line
-    }, [])
+    }, [user])
 
     //toggles dream menu 
     const toggleDreamText = () => {
