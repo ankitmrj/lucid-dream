@@ -1,5 +1,5 @@
 import React, {  useEffect, useState } from 'react';
-import { set, ref, onValue, remove } from 'firebase/database';
+import { set, ref, child, remove, get, getDatabase } from 'firebase/database';
 import { uuidv4 } from '@firebase/util';
 import { db } from '../../firebase-config';
 
@@ -39,19 +39,31 @@ function JournalComponent() {
     }
 
     //renders initial dreams from database
-    useEffect( () => {
-        onValue(ref(db), (snapshot) => {
-            setUserDreams([])
-            let uid = user.uid;
-            let data = snapshot.val();
-            console.log(typeof data)
-            console.log(data)
-            if (data !== null){
-                Object.values(data[user.uid].dreams).forEach(dream => {
-                    setUserDreams(oldArray => [...oldArray, dream]);
+    useEffect(() => {
+        const dbRef = ref(getDatabase())
+        
+        //Fetches dreams from firebase's database
+        get(child(dbRef, `/${user.uid}/dreams`)).then(snapshot => {
+            if (snapshot.exists()){
+                const dreams = snapshot.val()
+                Object.values(dreams).forEach(dream => {
+                    setUserDreams(prev => [...prev, dream])
+                })
+            } else {
+                console.log('No Data')
+            }
+        }).catch(err => {
+            console.error(err);
+        })
+
+        //Fetches created tags from firebase's database
+        get(child(dbRef, `/${user.uid}/tags`)).then(snapshot => {
+            if (snapshot.exists()){
+                const tags = snapshot.val()
+                Object.values(tags).forEach(tag => {
+                    setDreamTags(prev => [...prev, tag])
                 })
             }
-            
         })
 
         fetchDreams();
@@ -160,7 +172,7 @@ function JournalComponent() {
 
     //removes dream from database
     const handleDelete = (dream) => {
-        remove(ref(db, `/${dream.uuid}`))
+        remove(ref(db, `/${user.uid}/dreams/${dream.uuid}`))
     }
 
     // const handleUpdate = (dream) => {
@@ -217,7 +229,11 @@ function JournalComponent() {
                             />
                             <button type='button' onClick={addNewTag}>+</button>
                             <div className='tags'>
-                                {dreamTags.map(tag => (
+                                {dreamTags.map(tag => {
+                                    const capitalized = 
+                                        tag.charAt(0).toUpperCase()
+                                        + tag.slice(1);
+                                    return (
                                     <label className='switch'>
                                         <input 
                                             value={tag}
@@ -225,9 +241,10 @@ function JournalComponent() {
                                             id={tag}
                                             name={tag}
                                         />
-                                        <span className='slider'>{tag}</span>
+                                        <span className='slider'>{capitalized}</span>
                                     </label>
-                                ))}
+                                    )
+                                })}
                             </div>
                             <button type='submit' style={{marginBottom: '100px'}}>Submit Dream</button>
                         </form>
@@ -257,7 +274,7 @@ function JournalComponent() {
                             </div>
                             <div className='user-dream-tags'>
                                 {dream.tags.map((tag, index) => (
-                                    <p key={index}>{tag}</p>
+                                    <p key={index}>{tag.charAt(0).toUpperCase() + tag.slice(1)}</p>
                                 ))}
                             </div>
                             
