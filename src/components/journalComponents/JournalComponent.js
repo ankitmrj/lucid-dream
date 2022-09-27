@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { set, ref, onValue, remove } from 'firebase/database';
+import React, {  useEffect, useState } from 'react';
+import { set, ref, child, remove, get, getDatabase } from 'firebase/database';
 import { uuidv4 } from '@firebase/util';
 import { db } from '../../firebase-config';
 
@@ -26,41 +26,45 @@ function JournalComponent() {
     const [selectedTitle, setSelectedTitle] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedDesc, setSelectedDesc] = useState('');
-
     const [toEditDream, setToEditDream] = useState({});
+    const [editDreamTags, setEditDreamTags] = useState();
     const [isEdit, setIsEdit] = useState(false);
-    const [tempUuid, setTempUuid] = useState('');
     const {user} = UserAuth();
 
-    const fetchDreams = async () => {
-        setTimeout(() => {
-            onValue(ref(db), (snapshot) => {
-                setUserDreams([])
-                let uid = user.uid;
-                let data = snapshot.val();
-                if (data !== null){
-                    Object.values(data[uid].dreams).forEach(dream => {
-                        setUserDreams(oldArray => [...oldArray, dream]);
-                    })
-                }
-                
-            })
-        }, 500)
-        
-    }
-
     //renders initial dreams from database
-    useEffect( () => {
+    useEffect(() => {
+        const dbRef = ref(getDatabase())
         
-        fetchDreams();
-        displayInitialDreamTags();
-    }, [])
+        //Fetches dreams from firebase's database
+        get(child(dbRef, `/${user.uid}/dreams`)).then(snapshot => {
+            if (snapshot.exists()){
+                const dreams = snapshot.val()
+                Object.values(dreams).forEach(dream => {
+                    setUserDreams(prev => [...prev, dream])
+                })
+            } else {
+                console.log('No Data')
+            }
+        }).catch(err => {
+            console.error(err);
+        })
+
+        //Fetches created tags from firebase's database
+        get(child(dbRef, `/${user.uid}/tags`)).then(snapshot => {
+            if (snapshot.exists()){
+                const tags = snapshot.val()
+                Object.values(tags).forEach(tag => {
+                    setDreamTags(prev => [...prev, tag])
+                })
+            }
+        })
+        // eslint-disable-next-line
+    }, [user])
 
     //toggles dream menu 
     const toggleDreamText = () => {
         setDreamInputVisible(dreamInputVisible ? false : true);
         const dreamInput = document.querySelector('.dream-text');
-
         dreamInput.classList.toggle('hidden')
     }
 
@@ -70,45 +74,11 @@ function JournalComponent() {
         toggleDreamText();
         setDreamText('');
         setDreamTitle('');
-        
+
         for (let i in dreamCheckboxes){
             if (dreamCheckboxes[i].checked){
                 dreamCheckboxes[i].checked = false; //unchecks checked tags
             }
-        }
-    }
-
-    //creates new tag and appends it to the bottom of tags
-    const createDreamTag = (newTag) => {
-        const tagsParent = document.querySelector('.tags');
-
-        //creates tag label and adds class
-        const tagLabel = document.createElement('label');
-        tagLabel.classList.add('switch');
-
-        //creates tag input with attributes
-        const tagInput = document.createElement('input');
-        tagInput.setAttribute('value', newTag);
-        tagInput.setAttribute('type', 'checkbox');
-        tagInput.setAttribute('id', newTag);
-        tagInput.setAttribute('name', newTag);
-
-        //creates tag span with text and attributes
-        const tagSpan = document.createElement('span');
-        tagSpan.classList.add('slider');
-        tagSpan.innerHTML = newTag.charAt(0).toUpperCase() + newTag.slice(1);
-
-        //appends elements
-        tagLabel.appendChild(tagInput);
-        tagLabel.appendChild(tagSpan);
-        tagsParent.appendChild(tagLabel);
-    }
-
-    //displays default dream tags 
-    const displayInitialDreamTags = () => {
-        for (let i in dreamTags){
-            const dreamTag = dreamTags[i]
-            createDreamTag(dreamTag)
         }
     }
 
@@ -121,22 +91,9 @@ function JournalComponent() {
         }
     }
 
-    const findClickedDream = (dreamToFind) => {
-        const searchTitle = dreamToFind;
-        var clickedDream; //found dream, undefined for now
-    
-        //filters through dreams in list until it finds the dream with searchTitle
-        for (let dream in userDreams){
-            if (userDreams[dream].title === searchTitle){
-                clickedDream = userDreams[dream]; //saves found dream object to clickedDream
-            }
-        }
-        return clickedDream;
-    }
-
     //finds dream user clicks and displays it in a readable format
-    const toggleDisplayedDream = (e) => {
-        const clickedDream = findClickedDream(e.target.id);
+    const toggleDisplayedDream = (dream) => {
+        const clickedDream = dream;
 
         //sets variables to use as props
         setSelectedTitle(clickedDream.title);
@@ -151,7 +108,6 @@ function JournalComponent() {
         //checks if tag already exits
         if (!dreamTags.includes(createTag)){
             setDreamTags([...dreamTags, createTag]);
-            createDreamTag(createTag);
             set(ref(db, `${user.uid}/tags/${uuid}`), createTag)
             setCreateTag('');
         }
@@ -190,19 +146,51 @@ function JournalComponent() {
         toggleDreamText();
         setDreamText('');
         setDreamTitle('');
-
     }
 
     //removes dream from database
     const handleDelete = (dream) => {
-        remove(ref(db, `/${dream.uuid}`))
+        remove(ref(db, `/${user.uid}/dreams/${dream.uuid}`));
+        window.location.reload();
     }
 
-    const handleUpdate = (dream) => {
-        const clickedDream = findClickedDream(dream.title);
-        setToEditDream(clickedDream)
-        setTempUuid(dream.uuid);
-        setIsEdit(true);
+    const toggleUpdate = (dream) => {
+        setToEditDream(dream);
+        setEditDreamTags(dream.tags);
+        setIsEdit(isEdit ? false : true);
+    }
+
+    const handleSubmitEdit = e => {
+        const dreamCheckboxes = document.querySelectorAll('.switch input');
+        e.preventDefault();
+
+        //list for checked tags
+        const activeDreamTags = [];
+        
+        //loops through checkboxes and pushes checked tags to above list
+        for (let i in dreamCheckboxes){
+            if (dreamCheckboxes[i].checked){
+                activeDreamTags.push(dreamCheckboxes[i].value);
+                dreamCheckboxes[i].checked = false; //resets value
+            }
+        }
+        console.log(activeDreamTags)
+
+        setUserDreams(prev => 
+            prev.map(dream => {
+                if (dream.uuid === toEditDream.uuid){
+                    return {...toEditDream, tags: activeDreamTags}
+                }
+                return dream
+            })
+        )
+
+        set(ref(db, `/${user.uid}/dreams/${toEditDream.uuid}`), 
+        {
+            ...toEditDream, tags: activeDreamTags
+        }).catch(err => console.error(err))
+
+        setIsEdit(false);
     }
 
     return (
@@ -253,6 +241,22 @@ function JournalComponent() {
                             />
                             <button type='button' onClick={addNewTag}>+</button>
                             <div className='tags'>
+                                {dreamTags.map(tag => {
+                                    const capitalized = 
+                                        tag.charAt(0).toUpperCase()
+                                        + tag.slice(1);
+                                    return (
+                                    <label className='switch'>
+                                        <input 
+                                            value={tag}
+                                            type='checkbox'
+                                            id={tag}
+                                            name={tag}
+                                        />
+                                        <span className='slider'>{capitalized}</span>
+                                    </label>
+                                    )
+                                })}
                             </div>
                             <button type='submit' style={{marginBottom: '100px'}}>Submit Dream</button>
                         </form>
@@ -275,30 +279,41 @@ function JournalComponent() {
                     </div>
                     {userDreams.map((dream, index) => (
                         <>
-                        <div key={index} className='dream' id={dream.title} onClick={toggleDisplayedDream}>
+                        <div key={index} className='dream' id={dream.title} onClick={() => toggleDisplayedDream(dream)}>
                             <div className='user-dream-title'>
                                 <h2>{dream.title}</h2>
                                 <h4>{dream.date}</h4>
                             </div>
                             <div className='user-dream-tags'>
                                 {dream.tags.map((tag, index) => (
-                                    <p key={index}>{tag}</p>
+                                    <p key={index}>{tag.charAt(0).toUpperCase() + tag.slice(1)}</p>
                                 ))}
                             </div>
                             
                         </div>
-                        <button key={index + 10} onClick={() => handleDelete(dream)}>Delete</button>
-                        <button id={dream.title} key={index + 7} onClick={() => handleUpdate(dream)}>Edit</button>
+                        <button onClick={() => handleDelete(dream)}>Delete</button>
+                        <button id={dream.title} onClick={() => toggleUpdate(dream)}>Edit</button>
                         </>
                     ))}
-                    {isEdit ? 
+                    {isEdit && 
                     <div>
                         <form >
-                            <input type='text' value={toEditDream.title} onChange={e => setToEditDream(prev => ({...prev, title: e.target.value}))} />
+                            <input 
+                                type='text' 
+                                value={toEditDream.title} 
+                                onChange={e => setToEditDream(prev => ({...prev, title: e.target.value}))} 
+                            />
 
-                            <input type='date' value={toEditDream.date} onChange={e => setToEditDream(prev => ({...prev, date: e.target.value}))} />
+                            <input 
+                                type='date' 
+                                value={toEditDream.date} 
+                                onChange={e => setToEditDream(prev => ({...prev, date: e.target.value}))} 
+                            />
 
-                            <textarea value={toEditDream.dreamDesc} onChange={e => setToEditDream(prev => ({...prev, dreamDesc: e.target.value}))}></textarea>
+                            <textarea 
+                                value={toEditDream.dreamDesc} 
+                                onChange={e => setToEditDream(prev => ({...prev, dreamDesc: e.target.value}))}
+                            ></textarea>
                             
                             <p><label htmlFor='tags'>Tags:</label></p>
                             <input 
@@ -324,15 +339,13 @@ function JournalComponent() {
                                             name={tag} 
                                             defaultChecked={toEditDream.tags.includes(tag) ? 'checked' : ''}
                                         />
-                                        <span className='slider'>{tag}</span>
+                                        <span className='slider'>{tag.charAt(0).toUpperCase() + tag.slice(1)}</span>
                                     </label>
                                 ))}
                             </div>
-                            <button type='submit'>Finish Editing</button>
+                            <button type='submit' onClick={handleSubmitEdit} >Finish Editing</button>
                         </form>
                     </div>
-                    :
-                    null
                     }
                 </div>
             </section>
