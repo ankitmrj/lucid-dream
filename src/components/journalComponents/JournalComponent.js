@@ -26,9 +26,9 @@ function JournalComponent() {
     const [selectedTitle, setSelectedTitle] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedDesc, setSelectedDesc] = useState('');
-
-    // const [toEditDream, setToEditDream] = useState({});
-    // const [isEdit, setIsEdit] = useState(false);
+    const [toEditDream, setToEditDream] = useState({});
+    const [editDreamTags, setEditDreamTags] = useState();
+    const [isEdit, setIsEdit] = useState(false);
     const {user} = UserAuth();
 
     //renders initial dreams from database
@@ -150,14 +150,15 @@ function JournalComponent() {
 
     //removes dream from database
     const handleDelete = (dream) => {
-        remove(ref(db, `/${user.uid}/dreams/${dream.uuid}`))
+        remove(ref(db, `/${user.uid}/dreams/${dream.uuid}`));
+        window.location.reload();
     }
 
-    // const handleUpdate = (dream) => {
-    //     const clickedDream = findClickedDream(dream.title);
-    //     setToEditDream(clickedDream)
-    //     setIsEdit(true);
-    // }
+    const toggleUpdate = (dream) => {
+        setToEditDream(dream);
+        setEditDreamTags(dream.tags);
+        setIsEdit(isEdit ? false : true);
+    }
 
     return (
         <>
@@ -258,10 +259,10 @@ function JournalComponent() {
                             
                         </div>
                         <button onClick={() => handleDelete(dream)}>Delete</button>
-                        {/* <button id={dream.title} onClick={() => handleUpdate(dream)}>Edit</button> */}
+                        <button id={dream.title} onClick={() => toggleUpdate(dream)}>Edit</button>
                         </>
                     ))}
-                    {/* {isEdit ? 
+                    {isEdit && 
                     <div>
                         <form >
                             <input 
@@ -305,16 +306,14 @@ function JournalComponent() {
                                             name={tag} 
                                             defaultChecked={toEditDream.tags.includes(tag) ? 'checked' : ''}
                                         />
-                                        <span className='slider'>{tag}</span>
+                                        <span className='slider'>{tag.charAt(0).toUpperCase() + tag.slice(1)}</span>
                                     </label>
                                 ))}
                             </div>
                             <button type='submit'>Finish Editing</button>
                         </form>
                     </div>
-                    :
-                    null
-                    } */}
+                    }
                 </div>
             </section>
         </div>
