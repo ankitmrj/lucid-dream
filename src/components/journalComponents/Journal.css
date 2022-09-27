@@ -1,14 +1,98 @@
 #journal-component {
     width: 100%;
+    padding: 30px;
+}
+.journal-intro {
+    text-align: center;
+}
+.new-dream {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px 0;
+}
+.create-dream-btn {
+    padding: 10px 20px;
+    background: linear-gradient(to top right, var(--primary-color), var(--accent-color));
+    border: none;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
+}
+.create-dream-btn:hover {
+    cursor: pointer;
+}
+.create-dream-btn:active {
+    box-shadow: rgba(0, 0, 0, 0.3) 0 0 3px;
 }
 .hidden {
     display: none !important;
+}
+.dream-text {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.edit-dream {
+    width: 100%;
+}
+.edit-dream form {
+    width: 50%;
+}
+.dream-text input, .dream-text textarea {
+    padding: 5px 10px;
+    background: none;
+    border: black 2px solid;
+    border-radius: 5px;
+    width: 100%;
+}
+.dream-text input:focus, .dream-text textarea:focus {
+    outline: none;
+    border-color: var(--purple);
+}
+.tags-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.add-tag-btn {
+    background-color: var(--primary-color);
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 3px;
+    border: none;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+.add-tag-btn:hover {
+    cursor: pointer;
+}
+.add-tag-btn:active {
+    box-shadow: rgba(0, 0, 0, 0.3) 0 0 3px;
+}
+.tags, .edit-tags {
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 10px;
+}
+.submit-dream {
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: var(--secondary-color);
+    color: var(--background-color);
+}
+.submit-dream:hover {
+    cursor: pointer;
 }
 /* The switch - the box around the slider */
 .switch {
     position: relative;
     display: inline-block;
-    width: 100%;
+    width: 20%;
     height: 2rem;
 }
 
@@ -33,25 +117,74 @@
     left: 0;
     right: 0;
     bottom: 0;
+    margin: 0 auto;
 }
 input:checked + .slider {
     background: linear-gradient(to top right, var(--primary-color), var(--accent-color));
 }
+.dreams-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.dream-outline {
+    width: 80%;
+    max-width: 900px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    display: flex;
+}
+.dream-actions {
+    width: 10%;
+    display: flex;
+    flex-direction: column;
+}
+.edit-drm {
+    border-radius: 0 0 5px 0;
+}
+.delete-drm {
+    border-radius: 0 5px 0 0;
+}
+.edit-drm, .delete-drm {
+    height: 50%;
+    border: 2px solid black;
+    background: linear-gradient(to top right, var(--primary-color), var(--accent-color));
+}
+.edit-drm:hover, .delete-drm:hover {
+    cursor: pointer;
+}
 .dream {
     display: flex;
-    width: 80%;
+    width: 90%;
     max-width: 800px;
+    padding: 5px 10px;
     background: linear-gradient(to top right, var(--primary-color), var(--accent-color));
     border: 2px solid black;
-    border-radius: 5px;
+    border-radius: 5px 0 0 5px;
     justify-content: space-between;
     align-items: center;
-    margin: auto;
 }
 .dream:hover {
     cursor: pointer;
 }
 .user-dream-tag {
     padding: 2px;
+    text-align: center;
+}
+.edit-submit {
+    padding: 10px 15px;
+    background-color: var(--secondary-color);
+    border-radius: 5px;
+    color: var(--background-color);
+}
+.edit-cancel {
+    background: none;
+    border: none;
+    margin-left: 10px;
+}
+.edit-cancel:hover, .edit-submit:hover {
+    cursor: pointer;
+}
+.error-msg {
+    color: rgb(216, 63, 63);
     text-align: center;
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserAuth } from '../../context/AuthContext'
+import { UserAuth } from '../../context/AuthContext';
+import './UserProfile.css';
 
 function UserProfileComponent() {
     const {user, logout} = UserAuth();
@@ -21,12 +22,19 @@ function UserProfileComponent() {
             {!user ?
                 <p>Loading...</p>
                 :
-                <div>
-                    <h1>User</h1>
-                    <p>{user.email}</p>
-                    <p>{user.displayName}</p>
-                    <button onClick={handleLogout}>Logout</button>
-                </div>
+                <section id="user">
+                    <h1>User Profile</h1>
+                    <div className='user-card'>
+                        <div className='image'>
+                            <img src={user.photoURL} alt='profile' />
+                        </div>
+                        <div className='user-info'>
+                            <p>{user.email}</p>
+                            <p>{user.displayName}</p>
+                        </div>
+                        <button onClick={handleLogout}>Logout</button>
+                    </div>
+                </section>
             }
         </div>
     );

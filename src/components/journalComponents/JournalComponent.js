@@ -8,7 +8,7 @@ import './Journal.css';
 import { UserAuth } from '../../context/AuthContext';
 
 function JournalComponent() {
-    const dreamCheckboxes = document.querySelectorAll('.switch input');
+    const [error, setError] = useState('')
     //represents if the dream menu is hidden or not
     const [dreamInputVisible, setDreamInputVisible] = useState(false);
     //variable for title input field
@@ -27,8 +27,8 @@ function JournalComponent() {
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedDesc, setSelectedDesc] = useState('');
     const [toEditDream, setToEditDream] = useState({});
-    const [editDreamTags, setEditDreamTags] = useState();
     const [isEdit, setIsEdit] = useState(false);
+    const dreamCheckboxes = document.querySelectorAll('.switch input');
     const { user } = UserAuth();
 
     //renders initial dreams from database
@@ -62,6 +62,7 @@ function JournalComponent() {
     //toggles dream menu 
     const toggleDreamText = () => {
         setDreamInputVisible(dreamInputVisible ? false : true);
+        setError('');
         const dreamInput = document.querySelector('.dream-text');
         dreamInput.classList.toggle('hidden')
     }
@@ -127,6 +128,10 @@ function JournalComponent() {
                 dreamCheckboxes[i].checked = false; //resets value
             }
         }
+        if (activeDreamTags.length < 1){
+            setError('You must add at least one tag!')
+            return null
+        }
 
         //creates new dream object
         const newDream = {
@@ -144,6 +149,7 @@ function JournalComponent() {
         toggleDreamText();
         setDreamText('');
         setDreamTitle('');
+        setError('');
     }
 
     //removes dream from database
@@ -155,8 +161,8 @@ function JournalComponent() {
     //Sets necessary variables for the edit form
     const toggleUpdate = (dream) => {
         setToEditDream(dream);
-        setEditDreamTags(dream.tags);
         setIsEdit(isEdit ? false : true);
+        setError('');
     }
 
     //Handles submission when you finish editing
@@ -174,6 +180,10 @@ function JournalComponent() {
                 activeDreamTags.push(dreamCheckboxes[i].value);
                 dreamCheckboxes[i].checked = false; //resets value
             }
+        }
+        if (activeDreamTags.length < 1){
+            setError('You must add at least one tag!')
+            return null
         }
 
         //Resets dream that has a matching uuid
@@ -193,6 +203,7 @@ function JournalComponent() {
             }).catch(err => console.error(err))
 
         setIsEdit(false);
+        setError('');
     }
 
     return (
@@ -200,13 +211,15 @@ function JournalComponent() {
             <DisplayedDream title={selectedTitle} date={selectedDate} dreamDesc={selectedDesc} active={isActive} toggleActive={toggleVisibleDream} />
             <div id='journal-component'>
                 <section id='journal-input'>
-                    <h1>Dream Journal</h1>
-                    <p>A dream journal is vital to Lucid Dreaming because it trains your dream recall. You can also use your dream journal as a guide to many different techniques. All you need to do is enter your dream every morning, Stay Lucid makes that as easy as it can be!</p>
+                    <div className='journal-intro'>
+                        <h1>Dream Journal</h1>
+                        <p>A dream journal is vital to Lucid Dreaming because it trains your dream recall. You can also use your dream journal as a guide to many different techniques. All you need to do is enter your dream every morning, Stay Lucid makes that as easy as it can be!</p>
+                    </div>
                     <div className='new-dream'>
                         {
                             dreamInputVisible ?
-                                <button type='button' onClick={discardDream}>Discard Dream</button> :
-                                <button type='button' onClick={toggleDreamText}>New Dream</button>}
+                                <button className='create-dream-btn' type='button' onClick={discardDream}>Discard Dream</button> :
+                                <button className='create-dream-btn' type='button' onClick={toggleDreamText}>New Dream</button>}
                         <div className='dream-text hidden'>
                             <form onSubmit={submitNewDream}>
                                 <p><label htmlFor='title'>Title: </label></p>
@@ -227,6 +240,7 @@ function JournalComponent() {
                                 />
                                 <p><label htmlFor='dream-textarea'>Dream:</label></p>
                                 <textarea
+                                    minLength='10'
                                     id='dream-textarea'
                                     rows='10'
                                     cols='100'
@@ -235,13 +249,16 @@ function JournalComponent() {
                                     required
                                 ></textarea>
                                 <p><label htmlFor='tags'>Tags:</label></p>
+                                <div className='tags-inputs'>
                                 <input
                                     id='tags'
                                     type='text'
+                                    min='3'
                                     value={createTag}
                                     onChange={(e) => setCreateTag(e.target.value)}
                                 />
-                                <button type='button' onClick={addNewTag}>+</button>
+                                <button className='add-tag-btn' type='button' onClick={addNewTag}>+</button>
+                                </div>
                                 <div className='tags'>
                                     {dreamTags.map((tag, i) => {
                                         const capitalized =
@@ -260,16 +277,17 @@ function JournalComponent() {
                                         )
                                     })}
                                 </div>
-                                <button type='submit' style={{ marginBottom: '100px' }}>Submit Dream</button>
+                                {error && <p className='error-msg'>{error}</p>}
+                                <button className='submit-dream' type='submit' style={{ marginBottom: '100px' }}>Submit Dream</button>
                             </form>
                         </div>
                     </div>
 
                 </section>
                 <section style={{ marginBottom: '100px' }} id='user-dreams'>
-                    <h1>Dreams:</h1>
+                    <h1 className='dreams-title'>Dreams</h1>
                     <div className='displayed-dreams'>
-                        <div className='dream' id='example-dream' onClick={toggleDisplayedDream}>
+                        {/* <div className='dream' id='example-dream' onClick={toggleDisplayedDream}>
                             <div className='user-dream-title'>
                                 <h2>EXAMPLE DREAM</h2>
                                 <h4>2022-08-20</h4>
@@ -278,9 +296,13 @@ function JournalComponent() {
                                 <p className='user-dream-tag'>Lucid</p>
                                 <p className='user-dream-tag'>Vivid</p>
                             </div>
-                        </div>
+                        </div> */}
+                        {userDreams.length === 0 ?
+                            <p>You have not created dreams yet!</p>
+                            :
+                        <>
                         {userDreams.map((dream, index) => (
-                            <div key={index}>
+                            <div key={index} className='dream-outline'>
                                 <div className='dream' id={dream.title} onClick={() => toggleDisplayedDream(dream)}>
                                     <div className='user-dream-title'>
                                         <h2>{dream.title}</h2>
@@ -293,38 +315,48 @@ function JournalComponent() {
                                     </div>
 
                                 </div>
-                                <button onClick={() => handleDelete(dream)}>Delete</button>
-                                <button id={dream.title} onClick={() => toggleUpdate(dream)}>Edit</button>
+                                <div className='dream-actions'>
+                                    <button className='delete-drm' onClick={() => handleDelete(dream)}>Delete</button>
+                                    <button className='edit-drm' onClick={() => toggleUpdate(dream)}>Edit</button>
+                                </div>
                             </div>
                         ))}
+                        </>
+                        }
                         {isEdit &&
-                            <div>
-                                <form >
+                            <div className='dream-text edit-dream'>
+                                <form onSubmit={handleSubmitEdit} >
+                                    <label>Title:
                                     <input
+                                        id="edit-title"
                                         type='text'
                                         value={toEditDream.title}
                                         onChange={e => setToEditDream(prev => ({ ...prev, title: e.target.value }))}
-                                    />
+                                    /></label>
 
+                                    <label>Date:
                                     <input
                                         type='date'
                                         value={toEditDream.date}
                                         onChange={e => setToEditDream(prev => ({ ...prev, date: e.target.value }))}
-                                    />
+                                    /></label>
 
+                                    <label>Dream:
                                     <textarea
                                         value={toEditDream.dreamDesc}
                                         onChange={e => setToEditDream(prev => ({ ...prev, dreamDesc: e.target.value }))}
-                                    ></textarea>
+                                    ></textarea></label>
 
                                     <p><label htmlFor='tags'>Tags:</label></p>
+                                    <div className='tags-inputs'>
                                     <input
                                         id='tags'
                                         type='text'
                                         value={createTag}
                                         onChange={(e) => setCreateTag(e.target.value)}
                                     />
-                                    <button type='button' onClick={addNewTag}>+</button>
+                                    <button className='add-tag-btn' type='button' onClick={addNewTag}>+</button>
+                                    </div>
                                     <div className='edit-tags'>
                                         {toEditDream.tags.forEach(tag => {
                                             if (dreamTags.includes(tag)) { }
@@ -332,8 +364,8 @@ function JournalComponent() {
                                                 setDreamTags([...dreamTags, tag])
                                             }
                                         })}
-                                        {dreamTags.map((tag) => (
-                                            <label className='switch'>
+                                        {dreamTags.map((tag, index) => (
+                                            <label className='switch' key={index}>
                                                 <input
                                                     value={tag}
                                                     type='checkbox'
@@ -345,7 +377,11 @@ function JournalComponent() {
                                             </label>
                                         ))}
                                     </div>
-                                    <button type='submit' onClick={handleSubmitEdit} >Finish Editing</button>
+                                    {error && <p className='error-msg'>{error}</p>}
+                                    <div className='edit-action-btns'>
+                                        <button className='edit-submit' type='submit'>Finish Editing</button>
+                                        <button className='edit-cancel' type='button' onClick={() => setIsEdit(false)} >Cancel Edit</button>
+                                    </div>
                                 </form>
                             </div>
                         }
