@@ -160,6 +160,39 @@ function JournalComponent() {
         setIsEdit(isEdit ? false : true);
     }
 
+    const handleSubmitEdit = e => {
+        const dreamCheckboxes = document.querySelectorAll('.switch input');
+        e.preventDefault();
+
+        //list for checked tags
+        const activeDreamTags = [];
+        
+        //loops through checkboxes and pushes checked tags to above list
+        for (let i in dreamCheckboxes){
+            if (dreamCheckboxes[i].checked){
+                activeDreamTags.push(dreamCheckboxes[i].value);
+                dreamCheckboxes[i].checked = false; //resets value
+            }
+        }
+        console.log(activeDreamTags)
+
+        setUserDreams(prev => 
+            prev.map(dream => {
+                if (dream.uuid === toEditDream.uuid){
+                    return {...toEditDream, tags: activeDreamTags}
+                }
+                return dream
+            })
+        )
+
+        set(ref(db, `/${user.uid}/dreams/${toEditDream.uuid}`), 
+        {
+            ...toEditDream, tags: activeDreamTags
+        }).catch(err => console.error(err))
+
+        setIsEdit(false);
+    }
+
     return (
         <>
         <DisplayedDream title={selectedTitle} date={selectedDate} dreamDesc={selectedDesc} active={isActive} toggleActive={toggleVisibleDream} />
@@ -310,7 +343,7 @@ function JournalComponent() {
                                     </label>
                                 ))}
                             </div>
-                            <button type='submit'>Finish Editing</button>
+                            <button type='submit' onClick={handleSubmitEdit} >Finish Editing</button>
                         </form>
                     </div>
                     }
