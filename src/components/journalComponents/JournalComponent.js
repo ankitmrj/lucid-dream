@@ -103,6 +103,10 @@ function JournalComponent() {
     //add new tag to list as a checkbox
     const addNewTag = () => {
         const uuid = uuidv4()
+        if (createTag.length < 1){
+            setError('You cannot add an empty tag!');
+            return null;
+        }
         //checks if tag already exits
         if (!dreamTags.includes(createTag)) {
             setDreamTags([...dreamTags, createTag]);
@@ -376,6 +380,7 @@ function JournalComponent() {
                                                     id={tag}
                                                     name={tag}
                                                     defaultChecked={toEditDream.tags.includes(tag) ? 'checked' : ''}
+                                                    min='3'
                                                 />
                                                 <span className='slider'>{tag.charAt(0).toUpperCase() + tag.slice(1)}</span>
                                             </label>
