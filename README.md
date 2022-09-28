@@ -15,3 +15,4 @@ The user will be able to sign in/up and write their dreams down in the sites bui
 - React Router
 - Firebase (User Authentication)
 - Firebase (Realtime Databases)
+- Firebase (Storage)
