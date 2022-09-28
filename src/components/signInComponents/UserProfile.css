@@ -53,14 +53,14 @@
     margin-top: auto;
     margin-bottom: 30px;
 }
-.edit-account, .logout-btn {
+.edit-account, .logout-btn, .submit-edits {
     padding: 10px 15px;
     border-radius: 50px;
     border: var(--background-color) 2px solid;
     background: none;
     color: var(--background-color);
 }
-.edit-account:hover, .logout-btn:hover {
+.edit-account:hover, .logout-btn:hover, .submit-edits:hover {
     cursor: pointer;
 }
 .edit-user-account {
@@ -81,4 +81,15 @@
     align-items: center;
     gap: 20px;
     justify-content: space-evenly;
+}
+.user-info input {
+    width: 100%;
+    padding: 5px 10px;
+    background: none;
+    color: var(--background-color);
+    background-color: rgba(255, 255, 255, 0.1);
+    border: var(--background-color) 2px solid;
+}
+.user-info input:focus {
+    outline: none;
 }

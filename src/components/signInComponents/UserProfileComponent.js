@@ -138,37 +138,18 @@ function UserProfileComponent() {
                         </div>
                         <div className='user-action-btns'>
                             {isEdit ?
-                                <button className='edit-account' type='button' onClick={toggleEdit}>Cancel</button>
+                                <>
+                                    <button className='edit-account' type='button' onClick={toggleEdit}>Cancel</button>
+                                    <button className='submit-edits'>Submit</button>
+                                </>
                                 :
-                                <button className='edit-account' type='button' onClick={toggleEdit}>Edit Account</button>}
-                            <button className='logout-btn' type='button' onClick={handleLogout}>Logout</button>
+                                <>
+                                <button className='edit-account' type='button' onClick={toggleEdit}>Edit Account</button>
+                                <button className='logout-btn' type='button' onClick={handleLogout}>Logout</button>
+                                </>}
+                            
                         </div>
                     </div>
-                    {isEdit &&
-                        <div className='edit-user-account'>
-                            <div className='upload-image'>
-                                <h2>Upload New Profile Picture</h2>
-                                <div className='image-container'>
-                                </div>
-                                <button className='upload-btn' type='button' onClick={handleUpload} disabled={image === placeholder || loading}>Upload</button>
-                            </div>
-                            <div>
-                                <h2>Update User Information</h2>
-                                <form onSubmit={handleSubmitEdit}>
-                                    <label><p>Update Username:</p>
-                                        <input
-                                            placeholder='New Username...'
-                                            type='text'
-                                            value={username}
-                                            onChange={e => setUsername(e.target.value)}
-                                            required
-                                        /></label>
-                                    <button type='submit'>Submit Edits</button>
-                                </form>
-
-                            </div>
-                        </div>
-                    }
                 </section>
             }
         </div>
