@@ -7,14 +7,32 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import placeholder from '../images/placeholder.png'
 import './UserProfile.css';
 import LoadingScreen from 'react-loading-screen'
+import { child, get, ref as fdRef, getDatabase } from 'firebase/database';
 
 function UserProfileComponent() {
     const [isEdit, setIsEdit] = useState(false);
     const [loading, setLoading] = useState(true);
     const [username, setUsername] = useState();
     const [image, setImage] = useState(null);
+    const [amountOfDreams, setAmountOfDreams] = useState(0);
     const { user, logout } = UserAuth();
     const navigate = useNavigate();
+
+    const fetchData = async () => {
+        const dbRef = fdRef(getDatabase());
+        await get(child(dbRef, `/${user.uid}/dreams`))
+            .then(snapshot => {
+                if(snapshot.exists()){
+                    setAmountOfDreams(Object.values(snapshot.val()).length)
+                }
+            })
+            .catch(err => {
+                console.error(err);
+            })
+        setLoading(false);
+    }
+
+    
 
     useEffect(() => {
         if (!user.photoURL) {
@@ -23,7 +41,7 @@ function UserProfileComponent() {
             setImage(user.photoURL)
         }
         setUsername(user.displayName);
-        setLoading(false);
+        fetchData();
     }, [user])
 
     const handleImageChange = async e => {
@@ -62,10 +80,6 @@ function UserProfileComponent() {
             console.log(e.message);
         }
     }
-
-    // while(loading){
-    //     return <Loading />
-    // }
 
     return (
         <LoadingScreen
@@ -114,7 +128,7 @@ function UserProfileComponent() {
                         </div>
                         <div className='social-interactions'>
                             <p>Likes: 0</p>
-                            <p>Dreams: 0</p>
+                            <p>Dreams: {amountOfDreams}</p>
                         </div>
                         <div className='user-info'>
                             <h3>Email</h3>
