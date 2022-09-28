@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { set, ref, child, remove, get, getDatabase } from 'firebase/database';
 import { uuidv4 } from '@firebase/util';
 import { db } from '../../firebase-config';
-
+import LoadingScreen from 'react-loading-screen'
 import DisplayedDream from './DisplayedDream';
 import './Journal.css';
 import { UserAuth } from '../../context/AuthContext';
 
 function JournalComponent() {
-    const [error, setError] = useState('')
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(true);
     //represents if the dream menu is hidden or not
     const [dreamInputVisible, setDreamInputVisible] = useState(false);
     //variable for title input field
@@ -31,12 +32,11 @@ function JournalComponent() {
     const dreamCheckboxes = document.querySelectorAll('.switch input');
     const { user } = UserAuth();
 
-    //renders initial dreams from database
-    useEffect(() => {
+    const fetchData = async () => {
         const dbRef = ref(getDatabase())
 
         //Fetches dreams from firebase's database
-        get(child(dbRef, `/${user.uid}/dreams`)).then(snapshot => {
+        await get(child(dbRef, `/${user.uid}/dreams`)).then(snapshot => {
             if (snapshot.exists()) {
                 const dreams = snapshot.val()
                 Object.values(dreams).forEach(dream => {
@@ -48,7 +48,7 @@ function JournalComponent() {
         })
 
         //Fetches created tags from firebase's database
-        get(child(dbRef, `/${user.uid}/tags`)).then(snapshot => {
+        await get(child(dbRef, `/${user.uid}/tags`)).then(snapshot => {
             if (snapshot.exists()) {
                 const tags = snapshot.val()
                 Object.values(tags).forEach(tag => {
@@ -56,6 +56,12 @@ function JournalComponent() {
                 })
             }
         })
+        setLoading(false);
+    }
+
+    //renders initial dreams from database
+    useEffect(() => {
+        fetchData()
         // eslint-disable-next-line
     }, [user])
 
@@ -207,7 +213,12 @@ function JournalComponent() {
     }
 
     return (
-        <>
+        <LoadingScreen
+            loading={loading}
+            bgColor='#E8EBF4'
+            spinnerColor='#7336A4'
+            text='Loading...'
+        >
             <DisplayedDream title={selectedTitle} date={selectedDate} dreamDesc={selectedDesc} active={isActive} toggleActive={toggleVisibleDream} />
             <div id='journal-component'>
                 <section id='journal-input'>
@@ -298,7 +309,7 @@ function JournalComponent() {
                             </div>
                         </div> */}
                         {userDreams.length === 0 ?
-                            <p>You have not created dreams yet!</p>
+                            <p className='no-dreams-msg'>You have not created dreams yet!</p>
                             :
                         <>
                         {userDreams.map((dream, index) => (
@@ -388,7 +399,7 @@ function JournalComponent() {
                     </div>
                 </section>
             </div>
-        </>
+        </LoadingScreen>
     )
 }
 

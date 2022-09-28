@@ -188,3 +188,6 @@ input:checked + .slider {
     color: rgb(216, 63, 63);
     text-align: center;
 }
+.no-dreams-msg {
+    text-align: center;
+}

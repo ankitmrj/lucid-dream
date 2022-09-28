@@ -6,6 +6,7 @@ import { storage } from '../../firebase-config';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import placeholder from '../images/placeholder.png'
 import './UserProfile.css';
+import LoadingScreen from 'react-loading-screen'
 
 function UserProfileComponent() {
     const [isEdit, setIsEdit] = useState(false);
@@ -41,6 +42,7 @@ function UserProfileComponent() {
     }
 
     const handleSubmitEdit = async () => {
+        setLoading(true);
         await updateProfile(user, { displayName: username })
             .then(() => { console.log('Updated') })
             .catch(e => { console.error(e) })
@@ -61,12 +63,17 @@ function UserProfileComponent() {
         }
     }
 
-    while(loading){
-        return <p>Loading...</p>
-    }
+    // while(loading){
+    //     return <Loading />
+    // }
 
     return (
-        <div>
+        <LoadingScreen
+            loading={loading}
+            bgColor='#E8EBF4'
+            spinnerColor='#7336A4'
+            text='Loading...'
+        >
                 <section id="user">
                     <h1>User Profile</h1>
                     <div className='user-card'>
@@ -137,14 +144,14 @@ function UserProfileComponent() {
                                 </>
                                 :
                                 <>
-                                <button className='edit-account' type='button' onClick={toggleEdit}>Edit Account</button>
-                                <button className='logout-btn' type='button' onClick={handleLogout}>Logout</button>
+                                    <button className='edit-account' type='button' onClick={toggleEdit}>Edit Account</button>
+                                    <button className='logout-btn' type='button' onClick={handleLogout}>Logout</button>
                                 </>}
-                            
+
                         </div>
                     </div>
                 </section>
-        </div>
+        </LoadingScreen>
     );
 }
 
