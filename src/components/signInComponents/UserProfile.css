@@ -5,8 +5,46 @@
     text-align: center;
 }
 .user-card {
+    color: var(--background-color);
+    padding: 10px 15px;
+    border-radius: 10px;
     width: 300px;
     height: 500px;
-    background-color: grey;
+    background-color: var(--violet);
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.user-image {
+    display: flex;
+    width: 80%;
+    height: fit-content;
+    margin: 0 auto;
+}
+.user-image img {
+    border: var(--background-color) 2px solid;
+    border-radius: 50%;
+    margin: 0 auto;
+    width: 50%;
+    height: auto;
+}
+.user-action-btns {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    gap: 10px;
+    margin: 0 auto;
+    margin-top: auto;
+    margin-bottom: 30px;
+}
+.edit-account, .logout-btn {
+    padding: 10px 15px;
+    border-radius: 50px;
+    border: var(--background-color) 2px solid;
+    background: none;
+    color: var(--background-color);
+}
+.edit-account:hover, .logout-btn:hover {
+    cursor: pointer;
 }
