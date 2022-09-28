@@ -24,9 +24,7 @@ function JournalComponent() {
     const [isActive, setIsActive] = useState('none'); //if tag input is checked
     //list of dream object value variables
     const [userDreams, setUserDreams] = useState([]); //list of all user dreams
-    const [selectedTitle, setSelectedTitle] = useState('');
-    const [selectedDate, setSelectedDate] = useState('');
-    const [selectedDesc, setSelectedDesc] = useState('');
+    const [selectedDream, setSelectedDream] = useState({});
     const [toEditDream, setToEditDream] = useState({});
     const [isEdit, setIsEdit] = useState(false);
     const dreamCheckboxes = document.querySelectorAll('.switch input');
@@ -98,12 +96,7 @@ function JournalComponent() {
 
     //finds dream user clicks and displays it in a readable format
     const toggleDisplayedDream = (dream) => {
-        const clickedDream = dream;
-
-        //sets variables to use as props
-        setSelectedTitle(clickedDream.title);
-        setSelectedDate(clickedDream.date);
-        setSelectedDesc(clickedDream.dreamDesc);
+        setSelectedDream(dream);
         setIsActive('block'); //When variables are set, this displays it
     }
 
@@ -219,7 +212,7 @@ function JournalComponent() {
             spinnerColor='#7336A4'
             text='Loading...'
         >
-            <DisplayedDream title={selectedTitle} date={selectedDate} dreamDesc={selectedDesc} active={isActive} toggleActive={toggleVisibleDream} />
+            <DisplayedDream active={isActive} toggleActive={toggleVisibleDream} selectedDream={selectedDream} />
             <div id='journal-component'>
                 <section id='journal-input'>
                     <div className='journal-intro'>

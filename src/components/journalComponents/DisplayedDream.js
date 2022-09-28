@@ -1,15 +1,21 @@
 import React from 'react';
 import './DisplayedDream.css';
 
-function DisplayedDream(props) {
+function DisplayedDream({selectedDream, active, toggleActive}) {
   return (
-    <div style={{display: props.active}} id='displayed-dream-component'>
-      <div className='x' onClick={props.toggleActive}>
+    <div style={{display: active}} id='displayed-dream-component'>
+      <div className='x' onClick={toggleActive}>
       </div>
       <section className='displayed-dream'>
-        <h1 className='title'>{props.title}</h1>
-        <p className='date'>{props.date}</p>
-        <p className='description'>{props.dreamDesc}</p>
+        <h1 className='title'>{selectedDream.title}</h1>
+        <p className='date'>{selectedDream.date}</p>
+        <p className='tags-title'>Tags:</p>
+        <div className='displayed-tags'>
+          {selectedDream.tags && selectedDream.tags.map((val, i) => (
+            <p key={i}>{val.charAt(0).toUpperCase() + val.slice(1)}</p>
+          ))}
+        </div>
+        <p className='description'>{selectedDream.dreamDesc}</p>
       </section>
     </div>
   )

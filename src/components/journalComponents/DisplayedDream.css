@@ -15,7 +15,18 @@
     font-size: 0.9rem;
 }
 .description {
+    margin-top: 20px;
     font-size: 1.2rem;
+}
+.tags-title {
+    margin-top: 10px;
+}
+.displayed-tags {
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 0 auto;
 }
 .x {
     width: 30px;
