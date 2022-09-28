@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './Profile.css';
 import {UserAuth} from '../../context/AuthContext'
+import { getAuth, sendEmailVerification } from 'firebase/auth';
 
 function ProfileComponent() {
     //USER VARIABLES
@@ -23,6 +24,8 @@ function ProfileComponent() {
             //creates user and updates username 
             await createUser(registerEmail, registerPassword);
             await updateUsername(registerUsername);
+            const auth = getAuth()
+            await sendEmailVerification(auth.currentUser).then(() => {console.log('email sent')})
             navigate('/account'); //sends user to their account page
         } catch(e) {
             setError(e.message);

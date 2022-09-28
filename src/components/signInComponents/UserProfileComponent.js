@@ -1,10 +1,9 @@
-import { getAuth, updateProfile } from 'firebase/auth';
+import { updateProfile } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserAuth } from '../../context/AuthContext';
 import { storage } from '../../firebase-config';
-import { getDownloadURL, list, listAll, ref, uploadBytes } from 'firebase/storage';
-import { uuidv4 } from '@firebase/util';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import placeholder from '../images/placeholder.png'
 import './UserProfile.css';
 
@@ -13,39 +12,47 @@ function UserProfileComponent() {
     const [loading, setLoading] = useState(false);
     const [username, setUsername] = useState();
     const [image, setImage] = useState(null);
-    const {user, logout} = UserAuth();
+    const { user, logout } = UserAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!user.photoURL){
+        if (!user.photoURL) {
             setImage(placeholder)
         } else {
             setImage(user.photoURL)
         }
     }, [user])
 
-    const handleImageChange = e => {
-        if (e.target.files[0]){
+    const handleImageChange = async e => {
+        if (e.target.files[0]) {
             setImage(e.target.files[0])
         }
+        const newImage = e.target.files[0];
+        const fileRef = ref(storage, user.uid + '/images/');
+
+        await uploadBytes(fileRef, newImage);
+        const photoURL = await getDownloadURL(fileRef)
+
+        updateProfile(user, { photoURL })
+        window.location.reload();
     }
 
     const handleUpload = async () => {
         setLoading(true)
         const fileRef = ref(storage, user.uid + '/images/');
 
-        const snapshot = await uploadBytes(fileRef, image);
+        await uploadBytes(fileRef, image);
         const photoURL = await getDownloadURL(fileRef)
 
-        updateProfile(user, {photoURL})
+        updateProfile(user, { photoURL })
         window.location.reload();
     }
 
     const handleSubmitEdit = () => {
-        updateProfile(user, {displayName: username})
-            .then(() => {console.log('Updated')})
-            .catch(e => {console.error(e)})
-        
+        updateProfile(user, { displayName: username })
+            .then(() => { console.log('Updated') })
+            .catch(e => { console.error(e) })
+
         window.location.reload();
     }
 
@@ -57,7 +64,7 @@ function UserProfileComponent() {
         try {
             await logout();
             navigate('/signup');
-        } catch(e) {
+        } catch (e) {
             console.log(e.message);
         }
     }
@@ -71,7 +78,39 @@ function UserProfileComponent() {
                     <h1>User Profile</h1>
                     <div className='user-card'>
                         <div className='user-image'>
-                            <img src={image} alt='profile' />
+                            {user.photoURL ?
+                                <>
+                                    {isEdit ?
+                                        <>
+                                            <img src={image} alt='profile' />
+                                            <label className='file'>+
+                                                <input
+                                                    type='file'
+                                                    accept='image/*'
+                                                    onChange={handleImageChange}
+                                                /></label>
+                                        </>
+                                        :
+                                        <img src={image} alt='profile' />
+                                    }
+                                </>
+                                :
+                                <>
+                                    {isEdit ?
+                                        <>
+                                            <img src={placeholder} alt='profile' />
+                                            <label className='file'>+
+                                                <input
+                                                    type='file'
+                                                    accept='image/*'
+                                                    onChange={handleImageChange}
+                                                /></label>
+                                        </>
+                                        :
+                                        <img src={placeholder} alt='profile' />
+                                    }
+                                </>
+                            }
                         </div>
                         <div className='social-interactions'>
                             <p>Likes: 0</p>
@@ -80,43 +119,54 @@ function UserProfileComponent() {
                         <div className='user-info'>
                             <h3>Email</h3>
                             <p>{user.email}</p>
-                            { user.displayName &&
-                            <>
-                                <h3>Username</h3>
-                                <p>{user.displayName}</p>
-                            </>
-}
+                            {user.displayName &&
+                                <>
+                                    <h3>Username</h3>
+                                    {isEdit ?
+                                        <input
+                                            placeholder='New Username...'
+                                            type='text'
+                                            value={user.displayName}
+                                            onChange={e => setUsername(e.target.value)}
+                                            required
+                                        />
+                                        :
+                                        <p>{user.displayName}</p>
+                                    }
+                                </>
+                            }
                         </div>
                         <div className='user-action-btns'>
-                            { isEdit ?
-                            <button className='edit-account' type='button' onClick={toggleEdit}>Cancel</button>
-                            :
-                            <button className='edit-account' type='button' onClick={toggleEdit}>Edit Account</button>}
+                            {isEdit ?
+                                <button className='edit-account' type='button' onClick={toggleEdit}>Cancel</button>
+                                :
+                                <button className='edit-account' type='button' onClick={toggleEdit}>Edit Account</button>}
                             <button className='logout-btn' type='button' onClick={handleLogout}>Logout</button>
                         </div>
                     </div>
                     {isEdit &&
-                    <div className='edit-user-account'> 
-                        <div className='upload-image'>
-                            <input 
-                                type='file'
-                                accept='image/*'
-                                onChange={handleImageChange}
-                            />
-                            <button type='button' onClick={handleUpload} disabled={image === placeholder || loading}>Upload</button>
-                        </div>
-                        <div>
-                            <form onSubmit={handleSubmitEdit}>
-                                <input 
-                                    type='text'
-                                    value={username}
-                                    onChange={e => setUsername(e.target.value)}
-                                    required
-                                />
-                                <button type='submit'>Submit Edits</button>
-                            </form>
-                            
-                        </div>
+                        <div className='edit-user-account'>
+                            <div className='upload-image'>
+                                <h2>Upload New Profile Picture</h2>
+                                <div className='image-container'>
+                                </div>
+                                <button className='upload-btn' type='button' onClick={handleUpload} disabled={image === placeholder || loading}>Upload</button>
+                            </div>
+                            <div>
+                                <h2>Update User Information</h2>
+                                <form onSubmit={handleSubmitEdit}>
+                                    <label><p>Update Username:</p>
+                                        <input
+                                            placeholder='New Username...'
+                                            type='text'
+                                            value={username}
+                                            onChange={e => setUsername(e.target.value)}
+                                            required
+                                        /></label>
+                                    <button type='submit'>Submit Edits</button>
+                                </form>
+
+                            </div>
                         </div>
                     }
                 </section>
