@@ -44,6 +44,9 @@
     width: 30px;
     height: 30px;
 }
+.user-image .file:hover {
+    cursor: pointer;
+}
 .user-action-btns {
     display: flex;
     flex-direction: column;

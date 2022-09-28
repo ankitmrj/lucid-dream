@@ -9,7 +9,7 @@ import './UserProfile.css';
 
 function UserProfileComponent() {
     const [isEdit, setIsEdit] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [username, setUsername] = useState();
     const [image, setImage] = useState(null);
     const { user, logout } = UserAuth();
@@ -21,9 +21,12 @@ function UserProfileComponent() {
         } else {
             setImage(user.photoURL)
         }
+        setUsername(user.displayName);
+        setLoading(false);
     }, [user])
 
     const handleImageChange = async e => {
+        setLoading(true);
         if (e.target.files[0]) {
             setImage(e.target.files[0])
         }
@@ -37,19 +40,8 @@ function UserProfileComponent() {
         window.location.reload();
     }
 
-    const handleUpload = async () => {
-        setLoading(true)
-        const fileRef = ref(storage, user.uid + '/images/');
-
-        await uploadBytes(fileRef, image);
-        const photoURL = await getDownloadURL(fileRef)
-
-        updateProfile(user, { photoURL })
-        window.location.reload();
-    }
-
-    const handleSubmitEdit = () => {
-        updateProfile(user, { displayName: username })
+    const handleSubmitEdit = async () => {
+        await updateProfile(user, { displayName: username })
             .then(() => { console.log('Updated') })
             .catch(e => { console.error(e) })
 
@@ -69,11 +61,12 @@ function UserProfileComponent() {
         }
     }
 
+    while(loading){
+        return <p>Loading...</p>
+    }
+
     return (
         <div>
-            {!user ?
-                <p>Loading...</p>
-                :
                 <section id="user">
                     <h1>User Profile</h1>
                     <div className='user-card'>
@@ -126,7 +119,7 @@ function UserProfileComponent() {
                                         <input
                                             placeholder='New Username...'
                                             type='text'
-                                            value={user.displayName}
+                                            value={username}
                                             onChange={e => setUsername(e.target.value)}
                                             required
                                         />
@@ -140,7 +133,7 @@ function UserProfileComponent() {
                             {isEdit ?
                                 <>
                                     <button className='edit-account' type='button' onClick={toggleEdit}>Cancel</button>
-                                    <button className='submit-edits'>Submit</button>
+                                    <button className='submit-edits' type='button' onClick={handleSubmitEdit}>Submit</button>
                                 </>
                                 :
                                 <>
@@ -151,7 +144,6 @@ function UserProfileComponent() {
                         </div>
                     </div>
                 </section>
-            }
         </div>
     );
 }
