@@ -38,11 +38,8 @@ const ForumPost = ({ dream }) => {
 
   useEffect(() => {
     fetchData()
+    // eslint-disable-next-line
   }, [user])
-
-  useEffect(() => {
-    fetchData();
-  }, [likes])
 
   const handleLike = async () => {
     const dbRef = ref(getDatabase());

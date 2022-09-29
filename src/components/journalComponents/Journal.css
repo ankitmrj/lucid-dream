@@ -169,6 +169,7 @@ input:checked + .slider {
 .user-dream-tag {
     padding: 2px;
     text-align: center;
+    margin-bottom: 100px;
 }
 .edit-submit {
     padding: 10px 15px;
@@ -201,4 +202,38 @@ input:checked + .slider {
 }
 .share-container input[type="checkbox"] {
     cursor: pointer;
+}
+@media screen and (max-width: 750px) {
+    .dream {
+        width: 80%;
+    }
+    .dream-actions {
+        width: 20%;
+    }
+}
+@media screen and (max-width: 550px) {
+    #user-dreams {
+        margin-bottom: 0;
+    }
+}
+@media screen and (max-width: 350px) {
+    .dream-outline {
+        width: 100%;
+    }
+    .dream {
+        flex-direction: column;
+        width: 70%;
+    }
+    .user-dream-tags {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 5px;
+    }
+    .user-dream-tags p::after {
+        content: ',';
+    }
+    .dream-actions {
+        width: 30%;
+    }
 }

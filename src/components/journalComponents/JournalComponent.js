@@ -343,7 +343,7 @@ function JournalComponent() {
                     </div>
 
                 </section>
-                <section style={{ marginBottom: '100px' }} id='user-dreams'>
+                <section id='user-dreams'>
                     <h1 className='dreams-title'>Dreams</h1>
                     <div className='displayed-dreams'>
                         {/* <div className='dream' id='example-dream' onClick={toggleDisplayedDream}>

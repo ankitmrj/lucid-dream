@@ -65,3 +65,13 @@ footer {
     height: 1px;
     margin-bottom: 5px;
 }
+@media screen and (max-width: 750px) {
+    .footer-about {
+        width: 50%;
+    }
+}
+@media screen and (max-width: 450px) {
+    footer {
+        margin-bottom: 60px;
+    }
+}

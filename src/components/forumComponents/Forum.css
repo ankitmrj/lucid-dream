@@ -49,6 +49,7 @@
 }
 .post-tags {
     display: flex;
+    flex-wrap: wrap;
     gap: 5px;
     align-items: center;
 }
@@ -81,4 +82,13 @@
 }
 .post-error-msg {
     color: rgb(148, 43, 43);
+}
+#forum-section {
+    padding: 30px;
+    margin-bottom: 5vh;
+}
+@media screen and (max-width: 400px) {
+    .post-container {
+        max-height: 550px;
+    }
 }

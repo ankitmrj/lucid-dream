@@ -34,3 +34,29 @@ body {
     width: 100%;
     bottom: 0;
 }
+h1 {
+    font-size: 2em;
+}
+h2 {
+    font-size: 1.5em;
+}
+h3 {
+    font-size: 1.2em;
+}
+@media screen and (max-width: 750px) {
+    * {
+        font-size: 14px;
+    }
+    
+}
+@media screen and (max-width: 550px) {
+    * {
+        font-size: 12px;
+    }
+}
+@media screen and (max-width: 450px) {
+    body {
+        margin-right: 0;
+        margin-bottom: 60px;
+    }
+}
