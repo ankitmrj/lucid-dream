@@ -1,5 +1,11 @@
 .forum-section-desc {
+    width: 60%;
+    margin: 0 auto;
     margin-bottom: 50px;
+    text-align: center;
+}
+#forum-section h1 {
+    text-align: center;
 }
 .post-container {
     max-width: 600px;
@@ -20,6 +26,7 @@
     padding: 10px 20px;
 }
 .post-user-info img {
+    border: var(--purple) 2px solid;
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -87,8 +94,16 @@
     padding: 30px;
     margin-bottom: 5vh;
 }
+@media screen and (max-width: 750px) {
+    .forum-section-desc {
+        width: 80%;
+    }
+}
 @media screen and (max-width: 400px) {
     .post-container {
         max-height: 550px;
+    }
+    .forum-section-desc {
+        width: 90%;
     }
 }

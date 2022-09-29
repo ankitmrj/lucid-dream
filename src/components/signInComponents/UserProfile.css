@@ -96,3 +96,8 @@
 .user-info input:focus {
     outline: none;
 }
+@media screen and (max-width: 450px) {
+    #user {
+        margin-bottom: 100px;
+    }
+}

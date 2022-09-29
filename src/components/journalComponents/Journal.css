@@ -216,6 +216,11 @@ input:checked + .slider {
         margin-bottom: 0;
     }
 }
+@media screen and (max-width: 450px) {
+    #journal-component {
+        margin-bottom: 100px;
+    }
+}
 @media screen and (max-width: 350px) {
     .dream-outline {
         width: 100%;
