@@ -34,7 +34,11 @@ function UserProfileComponent() {
             .then(snapshot => {
                 if (snapshot.exists()){
                     const likes = snapshot.val()
-                    setAmountOfLikes(likes.likes)
+                    if (!likes.likes){
+                        setAmountOfLikes(0);
+                    } else {
+                        setAmountOfLikes(likes.likes)
+                    }
                 }
             })
         setLoading(false);
