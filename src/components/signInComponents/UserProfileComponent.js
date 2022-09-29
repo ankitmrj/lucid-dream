@@ -42,6 +42,7 @@ function UserProfileComponent() {
         }
         setUsername(user.displayName);
         fetchData();
+        // eslint-disable-next-line
     }, [user])
 
     const handleImageChange = async e => {

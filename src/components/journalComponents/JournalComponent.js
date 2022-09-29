@@ -31,7 +31,7 @@ function JournalComponent() {
     const { user } = UserAuth();
 
     const fetchData = async () => {
-        const dbRef = ref(getDatabase())
+        const dbRef = ref(getDatabase());
 
         //Fetches dreams from firebase's database
         await get(child(dbRef, `/${user.uid}/dreams`)).then(snapshot => {

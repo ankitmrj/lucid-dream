@@ -27,8 +27,8 @@
     border: var(--background-color) 2px solid;
     border-radius: 50%;
     margin: 0 auto;
-    width: 50%;
-    height: auto;
+    width: 110px;
+    height: 110px;
     position: relative;
 }
 .user-image .file {

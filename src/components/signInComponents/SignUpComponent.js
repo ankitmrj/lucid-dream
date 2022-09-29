@@ -19,13 +19,13 @@ function ProfileComponent() {
     //logic for when user clicks button or presses enter
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
+        
         try{
             //creates user and updates username 
             await createUser(registerEmail, registerPassword);
             await updateUsername(registerUsername);
             const auth = getAuth()
-            await sendEmailVerification(auth.currentUser).then(() => {console.log('email sent')})
+            await sendEmailVerification(auth.currentUser)
             navigate('/account'); //sends user to their account page
         } catch(e) {
             setError(e.message);
@@ -46,6 +46,7 @@ function ProfileComponent() {
                             name='username' 
                             type='text'
                             onChange={(e) => {setRegisterUsername(e.target.value)}} 
+                            required
                         />
                         </div>
                         <div className='input'>
@@ -55,6 +56,7 @@ function ProfileComponent() {
                             name='email' 
                             type='email'
                             onChange={(e) => {setRegisterEmail(e.target.value)}} 
+                            required
                         />
                         </div>
                         <div className='input'>
@@ -64,10 +66,12 @@ function ProfileComponent() {
                             name='password' 
                             type='password'
                             onChange={(e) => {setRegisterPassword(e.target.value)}} 
+                            required
                         />
                         </div>
+                        {error && <p>{error}</p>}
                         <div className='sign-in-actions'>
-                        <button id='sign-in-button'>Sign Up</button>
+                        <button type='submit' id='sign-in-button'>Sign Up</button>
                         <Link to='/signin' className='sign-up-text'>
                             Already have an account? Sign In
                         </Link>

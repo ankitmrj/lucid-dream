@@ -6,7 +6,6 @@ import './Profile.css';
 function SignInComponent() {
     const {signIn} = UserAuth();
     const navigate = useNavigate();
-
     const [error, setError] = useState('');
     const [loginEmail, setLoginEmail] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
@@ -35,6 +34,7 @@ function SignInComponent() {
                                 name='email' 
                                 type='email'
                                 onChange={(e) => {setLoginEmail(e.target.value)}} 
+                                required
                             />
                         </div>
                         <div className='input'>
@@ -44,10 +44,12 @@ function SignInComponent() {
                                 name='password' 
                                 type='password'
                                 onChange={(e) => {setLoginPassword(e.target.value)}} 
+                                required
                             />
                         </div>
+                        {error && <p>{error}</p>}
                         <div className='sign-in-actions'>
-                            <button id='sign-in-button'>Sign In</button>
+                            <button type='submit' id='sign-in-button'>Sign In</button>
                             <Link to='/signup' className='sign-up-text'>
                                 Don't have an account? Sign Up
                             </Link>
