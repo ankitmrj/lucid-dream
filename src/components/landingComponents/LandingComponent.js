@@ -2,7 +2,7 @@ import React from 'react';
 import './Landing.css';
 import sleep from '../images/sleep.png';
 import journal from '../images/travel-journal-black.png';
-import time from '../images/time-black.png';
+// import time from '../images/time-black.png';
 import forum from '../images/forum.png';
 
 function LandingComponent() {

@@ -4,6 +4,7 @@ import { uuidv4 } from '@firebase/util';
 import { db } from '../../firebase-config';
 import LoadingScreen from 'react-loading-screen'
 import DisplayedDream from './DisplayedDream';
+import profanityFinder from 'profanity-finder';
 import './Journal.css';
 import { UserAuth } from '../../context/AuthContext';
 
@@ -30,6 +31,7 @@ function JournalComponent() {
     const [isEdit, setIsEdit] = useState(false);
     const dreamCheckboxes = document.querySelectorAll('.switch input');
     const { user } = UserAuth();
+    const findProfanity = profanityFinder.findprofanity;
 
     const fetchData = async () => {
         const dbRef = ref(getDatabase());
@@ -158,6 +160,11 @@ function JournalComponent() {
             uuid
         }
 
+        if (shareToForum && (findProfanity(newDream.title) || findProfanity(newDream.dreamDesc))){
+            setError('You can not post dreams with profanity!');
+            return;
+        }
+
         setUserDreams(oldDreams => [newDream, ...oldDreams])//adds dream to global dreams
         set(ref(db, `${user.uid}/dreams/${uuid}`), newDream)
         if (shareToForum){
@@ -210,6 +217,10 @@ function JournalComponent() {
         if (activeDreamTags.length < 1){
             setError('You must add at least one tag!')
             return null
+        }
+        if (toEditDream.sharing && (findProfanity(toEditDream.title) || findProfanity(toEditDream.dreamDesc))){
+            setError('You can not post dreams with profanity!');
+            return;
         }
 
         //Resets dream that has a matching uuid
