@@ -20,6 +20,7 @@ function JournalComponent() {
     const [dreamText, setDreamText] = useState('');
     //dream tag variables
     const [dreamTags, setDreamTags] = useState(['lucid', 'nightmare', 'semi-lucid', 'vivid']);
+    const [shareToForum, setShareToForum] = useState(false);
     const [createTag, setCreateTag] = useState('');
     const [isActive, setIsActive] = useState('none'); //if tag input is checked
     //list of dream object value variables
@@ -142,6 +143,7 @@ function JournalComponent() {
             tags: activeDreamTags,
             date: dreamDate,
             dreamDesc: dreamText,
+            sharing: shareToForum,
             uuid
         }
 
@@ -152,6 +154,7 @@ function JournalComponent() {
         toggleDreamText();
         setDreamText('');
         setDreamTitle('');
+        setShareToForum(false);
         setError('');
     }
 
@@ -256,6 +259,15 @@ function JournalComponent() {
                                     onChange={(e) => setDreamText(e.target.value)}
                                     required
                                 ></textarea>
+                                <div className='share-container'>
+                                    <label>Share To Forum:
+                                        <input 
+                                            type='checkbox'
+                                            checked={shareToForum}
+                                            onChange={e => setShareToForum(e.target.checked)}
+                                        />
+                                    </label>
+                                </div>
                                 <p><label htmlFor='tags'>Tags:</label></p>
                                 <div className='tags-inputs'>
                                 <input
