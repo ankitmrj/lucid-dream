@@ -120,6 +120,12 @@ function JournalComponent() {
     const submitNewDream = (e) => {
         e.preventDefault();
 
+        const userInfo = {
+            username: user.displayName,
+            profilePic: user.photoURL,
+            uid: user.uid
+        }
+
         //random uuid to identify item
         const uuid = uuidv4()
         //list for checked tags
@@ -136,6 +142,8 @@ function JournalComponent() {
             setError('You must add at least one tag!')
             return null
         }
+        
+
 
         //creates new dream object
         const newDream = {
@@ -144,6 +152,8 @@ function JournalComponent() {
             date: dreamDate,
             dreamDesc: dreamText,
             sharing: shareToForum,
+            userInfo,
+            postData: {likes: 0},
             uuid
         }
 
@@ -177,6 +187,11 @@ function JournalComponent() {
     //Handles submission when you finish editing
     const handleSubmitEdit = e => {
         e.preventDefault();
+        const userInfo = {
+            username: user.displayName,
+            profilePic: user.photoURL,
+            uid: user.uid
+        }
         //Selects all inputs in the dom
         const dreamCheckboxes = document.querySelectorAll('.switch input');
 
@@ -213,7 +228,7 @@ function JournalComponent() {
         if (toEditDream.sharing){
             set(ref(db, `/shared-dreams/${toEditDream.uuid}`), 
             {
-                ...toEditDream, tags: activeDreamTags
+                ...toEditDream, tags: activeDreamTags, userInfo, postData: {likes: 0}
             }
             ).catch(err => console.error(err));
         } else {

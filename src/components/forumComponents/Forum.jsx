@@ -39,7 +39,7 @@ const Forum = () => {
         >
             <section id='forum-section'>
                 <h1>Welcome to the Forums!</h1>
-                <p>This is a place where users like yourself can share their</p>
+                <p>This is a place where users like yourself can share their dreams! You can start by navigating to your personal dream journal; then when you create your dream, you are given the option to share it to the forum! Sharing and reading other peoples dreams can be beneficial because it can give you inspiration, motivation, or insight.</p>
                 {sharedDreams.length > 0 ?
                     <>
                         {sharedDreams.map((dream, index) => (
