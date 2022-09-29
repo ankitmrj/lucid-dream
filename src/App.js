@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthContextProvider } from "./context/AuthContext";
 import UserProfileComponent from "./components/signInComponents/UserProfileComponent";
 import ProtectedRoute from "./components/signInComponents/ProtectedRoute";
+import Forum from "./components/forumComponents/Forum";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path='dream-journal' element={<ProtectedRoute><JournalComponent/></ProtectedRoute>}/>
           <Route path='account' element={<ProtectedRoute><UserProfileComponent /></ProtectedRoute>}/>
           <Route path='signup' element={<SignUpComponent/>}/>
+          <Route path='forum' element={<Forum />}/>
           <Route path='signin' element={<SignInComponent/>}/>
         </Routes>
         <FooterComponent/>
