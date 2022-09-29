@@ -152,12 +152,13 @@ function JournalComponent() {
             date: dreamDate,
             dreamDesc: dreamText,
             sharing: shareToForum,
+            timestamp: Date.now(),
             userInfo,
             postData: {likes: 0},
             uuid
         }
 
-        setUserDreams(oldDreams => [...oldDreams, newDream])//adds dream to global dreams
+        setUserDreams(oldDreams => [newDream, ...oldDreams])//adds dream to global dreams
         set(ref(db, `${user.uid}/dreams/${uuid}`), newDream)
         if (shareToForum){
             set(ref(db, `shared-dreams/${uuid}`), newDream);
@@ -172,8 +173,9 @@ function JournalComponent() {
     }
 
     //removes dream from database
-    const handleDelete = (dream) => {
-        remove(ref(db, `/${user.uid}/dreams/${dream.uuid}`));
+    const handleDelete = async (dream) => {
+        await remove(ref(db, `/shared-dreams/${dream.uuid}`));
+        await remove(ref(db, `/${user.uid}/dreams/${dream.uuid}`));
         window.location.reload();
     }
 
@@ -286,13 +288,13 @@ function JournalComponent() {
                                     required
                                 ></textarea>
                                 <div className='share-container'>
-                                    <label>Share To Forum:
+                                    <label htmlFor='share-checkbox'>Share To Forum:</label>
                                         <input 
                                             type='checkbox'
+                                            id='share-checkbox'
                                             checked={shareToForum}
                                             onChange={e => setShareToForum(e.target.checked)}
                                         />
-                                    </label>
                                 </div>
                                 <p><label htmlFor='tags'>Tags:</label></p>
                                 <div className='tags-inputs'>

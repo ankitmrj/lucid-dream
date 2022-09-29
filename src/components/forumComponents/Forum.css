@@ -34,7 +34,7 @@
     width: 10px;
 }
 .post-data::-webkit-scrollbar-track {
-    background: var(--primary-color);
+    background: none;
     border-radius: 10px;
 }
 .post-data::-webkit-scrollbar-thumb {
@@ -78,4 +78,7 @@
 }
 .like-btn i:hover {
     color: rgba(0, 0, 0, 0.7);
+}
+.post-error-msg {
+    color: rgb(148, 43, 43);
 }

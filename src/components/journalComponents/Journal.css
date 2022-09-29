@@ -191,3 +191,14 @@ input:checked + .slider {
 .no-dreams-msg {
     text-align: center;
 }
+.share-container {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.share-container input {
+    width: fit-content;
+}
+.share-container input[type="checkbox"] {
+    cursor: pointer;
+}

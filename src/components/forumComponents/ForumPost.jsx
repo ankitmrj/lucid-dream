@@ -16,6 +16,7 @@ const ForumPost = ({ dream }) => {
   const { user } = UserAuth();
   const [likes, setLikes] = useState(dream.postData.likes);
   const [liked, setLiked] = useState('black');
+  const [error, setError] = useState('');
 
   const fetchData = async () => {
     const dbRef = ref(getDatabase());
@@ -45,6 +46,13 @@ const ForumPost = ({ dream }) => {
 
   const handleLike = async () => {
     const dbRef = ref(getDatabase());
+    if (user.uid === dream.userInfo.uid){
+        setError('You cannot like your own posts!');
+        setTimeout(() => {
+            setError('')
+        }, 5000)
+        return null;
+    }
 
     let keys = await get(child(dbRef, `${user.uid}/stats/likedPosts`)).then(
       (snapshot) => {
@@ -122,6 +130,7 @@ const ForumPost = ({ dream }) => {
           <i style={{color: liked}} className="fa-solid fa-heart"></i>
         </button>
         <p>{likes}</p>
+        {error && <p className="post-error-msg">{error}</p>}
       </div>
     </div>
   );
