@@ -149,6 +149,9 @@ function JournalComponent() {
 
         setUserDreams(oldDreams => [...oldDreams, newDream])//adds dream to global dreams
         set(ref(db, `${user.uid}/dreams/${uuid}`), newDream)
+        if (shareToForum){
+            set(ref(db, `shared-dreams/${uuid}`), newDream);
+        }
 
         //resets dream values
         toggleDreamText();
@@ -167,7 +170,7 @@ function JournalComponent() {
     //Sets necessary variables for the edit form
     const toggleUpdate = (dream) => {
         setToEditDream(dream);
-        setIsEdit(isEdit ? false : true);
+        setIsEdit(!isEdit);
         setError('');
     }
 
@@ -207,7 +210,15 @@ function JournalComponent() {
             {
                 ...toEditDream, tags: activeDreamTags
             }).catch(err => console.error(err))
-
+        if (toEditDream.sharing){
+            set(ref(db, `/shared-dreams/${toEditDream.uuid}`), 
+            {
+                ...toEditDream, tags: activeDreamTags
+            }
+            ).catch(err => console.error(err));
+        } else {
+            remove(ref(db, `/shared-dreams/${toEditDream.uuid}`));
+        }
         setIsEdit(false);
         setError('');
     }
@@ -366,6 +377,15 @@ function JournalComponent() {
                                         value={toEditDream.dreamDesc}
                                         onChange={e => setToEditDream(prev => ({ ...prev, dreamDesc: e.target.value }))}
                                     ></textarea></label>
+                                    <div className='share-container'>
+                                        <label>Share To Forum:
+                                            <input 
+                                                type='checkbox'
+                                                checked={toEditDream.sharing}
+                                                onChange={e => setToEditDream(prev => ({...prev, sharing: e.target.checked}))}
+                                            />
+                                        </label>
+                                    </div>
 
                                     <p><label htmlFor='tags'>Tags:</label></p>
                                     <div className='tags-inputs'>
