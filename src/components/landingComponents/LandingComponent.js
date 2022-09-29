@@ -32,11 +32,11 @@ function LandingComponent() {
                         <h3>Dream Journal</h3>
                         <p>Dream recall is one of the most important things when it comes to lucid dreaming because what's the point of a lucid dream if you can't even remember it? The best way to train your dream recall is something that we provide for you! The Stay Lucid dream journal.</p>
                     </div>
-                    <div className='feature'>
+                    {/* <div className='feature'>
                         <img alt='reality check' src={time} width='50px' />
                         <h3>Reality Checks</h3>
                         <p>Our busy lives restrict us from remembering to do a reality check every hour, we got you covered! With Stay Lucid, you have the option of reminding yourself to do a reality check every hour within a set period daily!</p>
-                    </div>
+                    </div> */}
                     <div className='feature'>
                         <img alt='forum' src={forum} width='50px' />
                         <h3>The Dream Forum</h3>
