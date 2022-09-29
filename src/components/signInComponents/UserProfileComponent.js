@@ -15,6 +15,7 @@ function UserProfileComponent() {
     const [username, setUsername] = useState();
     const [image, setImage] = useState(null);
     const [amountOfDreams, setAmountOfDreams] = useState(0);
+    const [amountOfLikes, setAmountOfLikes] = useState(0);
     const { user, logout } = UserAuth();
     const navigate = useNavigate();
 
@@ -28,6 +29,13 @@ function UserProfileComponent() {
             })
             .catch(err => {
                 console.error(err);
+            })
+        await get(child(dbRef, `${user.uid}/stats`))
+            .then(snapshot => {
+                if (snapshot.exists()){
+                    const likes = snapshot.val()
+                    setAmountOfLikes(likes.likes)
+                }
             })
         setLoading(false);
     }
@@ -128,7 +136,7 @@ function UserProfileComponent() {
                             }
                         </div>
                         <div className='social-interactions'>
-                            <p>Likes: 0</p>
+                            <p>Likes: {amountOfLikes}</p>
                             <p>Dreams: {amountOfDreams}</p>
                         </div>
                         <div className='user-info'>

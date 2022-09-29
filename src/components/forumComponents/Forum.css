@@ -1,7 +1,12 @@
+.forum-section-desc {
+    margin-bottom: 50px;
+}
 .post-container {
     max-width: 600px;
-    max-height: 700px;
-    background-color: grey;
+    max-height: 650px;
+    background: linear-gradient(to top right, var(--primary-color), var(--accent-color));;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0 0 5px;
     margin: 0 auto;
     margin-bottom: 50px;
     display: flex;
@@ -25,6 +30,17 @@
     min-height: 100%;
     overflow-y: scroll;
 }
+.post-data::-webkit-scrollbar {
+    width: 10px;
+}
+.post-data::-webkit-scrollbar-track {
+    background: var(--primary-color);
+    border-radius: 10px;
+}
+.post-data::-webkit-scrollbar-thumb {
+    background: var(--violet);
+    border-radius: 10px;
+}
 .post-tags-container {
     margin-top: 5px;
     display: flex;
@@ -41,4 +57,25 @@
 }
 .post-dream-text {
     padding: 20px 0;
+}
+.post-actions {
+    padding: 10px 20px;
+    gap: 10px;
+    align-items: center;
+    display: flex;
+    width: 100%;
+}
+.like-btn {
+    background: none;
+    border: none;
+    text-align: center;
+}
+.like-btn:hover {
+    cursor: pointer;
+}
+.like-btn i {
+    font-size: 20px;
+}
+.like-btn i:hover {
+    color: rgba(0, 0, 0, 0.7);
 }
