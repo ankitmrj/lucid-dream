@@ -59,8 +59,11 @@ function UserProfileComponent() {
 
     const handleImageChange = async e => {
         setLoading(true);
-        if (e.target.files[0]) {
+        console.log(e.target.files[0])
+        if (e.target.files[0].type === 'image/png' || e.target.files[0].type === 'image/jpeg') {
             setImage(e.target.files[0])
+        } else {
+            return;
         }
         const newImage = e.target.files[0];
         const fileRef = ref(storage, user.uid + '/images/');
@@ -69,7 +72,7 @@ function UserProfileComponent() {
         const photoURL = await getDownloadURL(fileRef)
 
         updateProfile(user, { photoURL })
-        window.location.reload();
+        // window.location.reload();
     }
 
     const handleSubmitEdit = async () => {

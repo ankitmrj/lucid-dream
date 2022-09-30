@@ -197,8 +197,9 @@ function JournalComponent() {
     }
 
     //Handles submission when you finish editing
-    const handleSubmitEdit = e => {
+    const handleSubmitEdit = async e => {
         e.preventDefault();
+        const dbRef = ref(getDatabase())
         const userInfo = {
             username: user.displayName,
             profilePic: user.photoURL,
@@ -235,6 +236,15 @@ function JournalComponent() {
                 return dream
             })
         )
+        const currentLikes = await get(child(dbRef, `/shared-dreams/${toEditDream.uuid}/postData`))
+        .then(snapshot => {
+            if(snapshot.exists()){
+                return snapshot.val().likes;
+            }
+        })
+        .catch(err => {
+            console.error(err);
+        })
 
         //updates dream in firebase's database
         set(ref(db, `/${user.uid}/dreams/${toEditDream.uuid}`),
@@ -244,7 +254,7 @@ function JournalComponent() {
         if (toEditDream.sharing){
             set(ref(db, `/shared-dreams/${toEditDream.uuid}`), 
             {
-                ...toEditDream, tags: activeDreamTags, userInfo, postData: {likes: 0}
+                ...toEditDream, tags: activeDreamTags, userInfo, postData: {likes: currentLikes}
             }
             ).catch(err => console.error(err));
         } else {

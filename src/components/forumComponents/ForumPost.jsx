@@ -19,6 +19,9 @@ const ForumPost = ({ dream }) => {
   const [error, setError] = useState('');
 
   const fetchData = async () => {
+    if (!user){
+      return;
+    }
     const dbRef = ref(getDatabase());
     let data = await get(child(dbRef, `${user.uid}/stats/likedPosts`)).then(
         (snapshot) => {
@@ -30,7 +33,7 @@ const ForumPost = ({ dream }) => {
         }
       );
       if (data.includes(dream.uuid)){
-        setLiked('red');
+        setLiked('#b63030');
       } else {
         setLiked('black')
       }
@@ -46,13 +49,20 @@ const ForumPost = ({ dream }) => {
   }, [user])
 
   const handleLike = async () => {
+    if (!user){
+      setError('You need to create an account first!');
+      setTimeout(() => {
+        setError('');
+      }, 5000)
+      return;
+    }
     const dbRef = ref(getDatabase());
     if (user.uid === dream.userInfo.uid){
         setError('You cannot like your own posts!');
         setTimeout(() => {
             setError('')
         }, 5000)
-        return null;
+        return;
     }
 
     let keys = await get(child(dbRef, `${user.uid}/stats/likedPosts`)).then(
