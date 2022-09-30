@@ -41,6 +41,7 @@ const ForumPost = ({ dream }) => {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line
   }, [likes])
 
   useEffect(() => {

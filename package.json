@@ -1,6 +1,11 @@
 {
   "name": "lucid-dream",
-  "version": "0.1.0",
+  "author": {
+    "name": "Nehemiah Dias",
+    "email": "nehemiahdias@gmail.com",
+    "url": "https://ndias.info"
+  },
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
