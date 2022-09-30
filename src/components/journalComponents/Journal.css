@@ -210,6 +210,9 @@ input:checked + .slider {
     .edit-dream form {
         width: 70%;
     }
+    #journal-component {
+        margin-bottom: 100px;
+    }
 }
 @media screen and (max-width: 750px) {
     .dream {

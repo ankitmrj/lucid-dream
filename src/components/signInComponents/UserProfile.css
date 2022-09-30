@@ -98,6 +98,14 @@
 .user-info input:focus {
     outline: none;
 }
+.user-err {
+    margin: 0;
+}
+@media screen and (max-width: 1200px) {
+    #user {
+        margin-bottom: 100px;
+    }
+}
 @media screen and (max-width: 450px) {
     #user {
         margin-bottom: 100px;

@@ -16,11 +16,12 @@ function UserProfileComponent() {
     const [image, setImage] = useState(null);
     const [amountOfDreams, setAmountOfDreams] = useState(0);
     const [amountOfLikes, setAmountOfLikes] = useState(0);
+    const [error, setError] = useState('');
     const { user, logout } = UserAuth();
     const navigate = useNavigate();
+    const dbRef = fdRef(getDatabase());
 
     const fetchData = async () => {
-        const dbRef = fdRef(getDatabase());
         await get(child(dbRef, `/${user.uid}/dreams`))
             .then(snapshot => {
                 if(snapshot.exists()){
@@ -59,12 +60,17 @@ function UserProfileComponent() {
 
     const handleImageChange = async e => {
         setLoading(true);
-        console.log(e.target.files[0])
         if (e.target.files[0].type === 'image/png' || e.target.files[0].type === 'image/jpeg') {
             setImage(e.target.files[0])
         } else {
+            setLoading(false);
+            setError('Image must be .png or .jpg');
+            setTimeout(() => {
+                setError('');
+            }, 5000)
             return;
         }
+        
         const newImage = e.target.files[0];
         const fileRef = ref(storage, user.uid + '/images/');
 
@@ -76,11 +82,12 @@ function UserProfileComponent() {
     }
 
     const handleSubmitEdit = async () => {
+        const toSetUsername = username.split(' ').join('-');
         if (username.length < 3) {
             return;
         }
         setLoading(true);
-        await updateProfile(user, { displayName: username })
+        await updateProfile(user, { displayName: toSetUsername })
             .then(() => { console.log('Updated') })
             .catch(e => { console.error(e) })
 
@@ -170,6 +177,7 @@ function UserProfileComponent() {
                                 </>
                             }
                         </div>
+                        {error && <p className='error-msg user-err'>{error}</p>}
                         <div className='user-action-btns'>
                             {isEdit ?
                                 <>
