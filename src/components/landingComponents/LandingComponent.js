@@ -15,7 +15,7 @@ function LandingComponent() {
                     <p>If you could control your dreams and do as you please, what would you do? Find out tonight with the help of Stay Lucid! Lucid Dreaming is when the dreamer is aware they're dreaming, sounds simple enough right? It takes an immense amount of practice and mental awareness which is much harder than it sounds, Stay Lucid is here to make that as easy as possible!</p>
                     <div className='landing-learn-more'>
                         <div className='landing-buttons'>
-                            <button>Learn More!</button>
+                            <button  onClick={() => {window.scrollTo(0, document.body.scrollHeight)}}>Learn More!</button>
                         </div>
                         <img alt='sleep illustration' src={sleep} width='300px' />
                     </div>
