@@ -9,6 +9,7 @@ import { AuthContextProvider } from "./context/AuthContext";
 import UserProfileComponent from "./components/signInComponents/UserProfileComponent";
 import ProtectedRoute from "./components/signInComponents/ProtectedRoute";
 import Forum from "./components/forumComponents/Forum";
+import ForgotPassword from "./components/signInComponents/ForgotPassword";
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path='signup' element={<SignUpComponent/>}/>
           <Route path='forum' element={<Forum />}/>
           <Route path='signin' element={<SignInComponent/>}/>
+          <Route path='password-reset' element={<ForgotPassword />} />
         </Routes>
         <FooterComponent/>
       </BrowserRouter>

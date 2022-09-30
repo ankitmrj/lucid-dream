@@ -51,11 +51,14 @@ function SignInComponent() {
                                 required
                             />
                         </div>
-                        {error && <p>{error}</p>}
+                        {error && <p className='error-msg'>{error}</p>}
                         <div className='sign-in-actions'>
                             <button type='submit' id='sign-in-button'>Sign In</button>
                             <Link to='/signup' className='sign-up-text'>
                                 Don't have an account? Sign Up
+                            </Link>
+                            <Link to='/password-reset' className='sign-up-text'>
+                                Forgot Your Password?
                             </Link>
                         </div>
                     </form>

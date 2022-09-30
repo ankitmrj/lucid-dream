@@ -73,6 +73,9 @@ function UserProfileComponent() {
     }
 
     const handleSubmitEdit = async () => {
+        if (username.length < 3) {
+            return;
+        }
         setLoading(true);
         await updateProfile(user, { displayName: username })
             .then(() => { console.log('Updated') })
@@ -153,6 +156,7 @@ function UserProfileComponent() {
                                         <input
                                             placeholder='New Username...'
                                             type='text'
+                                            min='1'
                                             value={username}
                                             onChange={e => setUsername(e.target.value)}
                                             required

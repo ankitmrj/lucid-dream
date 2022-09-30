@@ -4,7 +4,7 @@ import './Footer.css';
 
 function FooterComponent() {
     const {pathname} = useLocation();
-    if (pathname === '/signin' || pathname === '/signup') return null;
+    if (pathname === '/signin' || pathname === '/signup' || pathname === '/password-reset') return null;
   return (
     
     <div id='footer'>
