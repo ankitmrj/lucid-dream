@@ -19,11 +19,12 @@ function ProfileComponent() {
     //logic for when user clicks button or presses enter
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const formattedUsername = registerUsername.split(' ').join('-')
         
         try{
             //creates user and updates username 
             await createUser(registerEmail, registerPassword);
-            await updateUsername(registerUsername);
+            await updateUsername(formattedUsername);
             const auth = getAuth()
             await sendEmailVerification(auth.currentUser)
             navigate('/account'); //sends user to their account page
