@@ -16,7 +16,11 @@ function SignInComponent() {
             await signIn(loginEmail, loginPassword);
             navigate('/account');
         } catch(e) {
-            setError(e.message);
+            if (e.message === 'Firebase: Error (auth/wrong-password).'){
+                setError('Incorrect Password')
+            } else if (e.message === 'Firebase: Error (auth/user-not-found).'){
+                setError('User not found')
+            }
             console.log(e.message)
         }
     }

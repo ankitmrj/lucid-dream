@@ -26,6 +26,8 @@
 .user-image img {
     border: var(--background-color) 2px solid;
     border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
     margin: 0 auto;
     width: 110px;
     height: 110px;

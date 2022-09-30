@@ -11,17 +11,21 @@ const Forum = () => {
 
     const fetchData = async () => {
         const dbRef = ref(getDatabase());
+        const dreamsArr = [];
 
         await get(child(dbRef, `/shared-dreams`)).then(snapshot => {
             if (snapshot.exists()) {
-                const dreams = snapshot.val()
+                const dreams = snapshot.val();
                 Object.values(dreams).forEach(dream => {
-                    setSharedDreams(prev => [dream, ...prev])
+                    dreamsArr.push(dream)
                 })
             }
         }).catch(err => {
             console.error(err);
         })
+        dreamsArr.sort((a, b) => b.timestamp - a.timestamp);
+
+        setSharedDreams([...dreamsArr])
 
         setLoading(false);
     }

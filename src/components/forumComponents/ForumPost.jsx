@@ -37,6 +37,10 @@ const ForumPost = ({ dream }) => {
   }
 
   useEffect(() => {
+    fetchData();
+  }, [likes])
+
+  useEffect(() => {
     fetchData()
     // eslint-disable-next-line
   }, [user])
@@ -70,7 +74,6 @@ const ForumPost = ({ dream }) => {
         }
       }
     );
-    console.log(keys);
 
     if (data.includes(dream.uuid)) {
       const index = data.indexOf(dream.uuid);
