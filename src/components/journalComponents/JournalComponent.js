@@ -35,18 +35,21 @@ function JournalComponent() {
 
     const fetchData = async () => {
         const dbRef = ref(getDatabase());
+        const dreamsArr = []
 
         //Fetches dreams from firebase's database
         await get(child(dbRef, `/${user.uid}/dreams`)).then(snapshot => {
             if (snapshot.exists()) {
                 const dreams = snapshot.val()
                 Object.values(dreams).forEach(dream => {
-                    setUserDreams(prev => [...prev, dream])
+                    dreamsArr.push(dream);
                 })
             }
         }).catch(err => {
             console.error(err);
         })
+        dreamsArr.sort((a, b) => b.timestamp - a.timestamp)
+        setUserDreams([...dreamsArr]);
 
         //Fetches created tags from firebase's database
         await get(child(dbRef, `/${user.uid}/tags`)).then(snapshot => {
@@ -404,6 +407,8 @@ function JournalComponent() {
                                     <textarea
                                         value={toEditDream.dreamDesc}
                                         onChange={e => setToEditDream(prev => ({ ...prev, dreamDesc: e.target.value }))}
+                                        rows='10'
+                                        cols='100'
                                     ></textarea></label>
                                     <div className='share-container'>
                                         <label>Share To Forum:
