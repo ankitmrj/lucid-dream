@@ -37,6 +37,7 @@ function SignInComponent() {
                                 id='email' 
                                 name='email' 
                                 type='email'
+                                placeholder='For testers: demo@demo.com...'
                                 onChange={(e) => {setLoginEmail(e.target.value)}} 
                                 required
                             />
@@ -47,6 +48,7 @@ function SignInComponent() {
                                 id='password' 
                                 name='password' 
                                 type='password'
+                                placeholder='For testers: demoPass...'
                                 onChange={(e) => {setLoginPassword(e.target.value)}} 
                                 required
                             />
