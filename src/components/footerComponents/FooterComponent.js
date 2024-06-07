@@ -20,13 +20,13 @@ function FooterComponent() {
                     <h2>Contact</h2>
                     <p>Dream stories, questions, suggestions, we want to hear it!</p>
                     <a rel='noreferrer' href='https://ndias.info' target='_blank'>999-999-9999</a>
-                    <a rel='noreferrer' href='https://ndias.info' target='_blank'>email@email.com</a>
+                    <a rel='noreferrer' href='https://ndias.info' target='_blank'>mmmut@email.com</a>
                 </div>
             </div>
         </div>
         <div className='author'>
             <hr/>
-            <p>Made with 🤍 by <a href='https://nehemiahdias.netlify.app/' target='_blank' rel='noreferrer'>Nehemiah Dias</a></p>
+            <p>Made with 🤍 by  >Alok Ranjan</a></p>
         </div>
     </footer>
     </div>
