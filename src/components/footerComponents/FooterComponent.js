@@ -26,7 +26,7 @@ function FooterComponent() {
         </div>
         <div className='author'>
             <hr/>
-            <p>Made with 🤍 by  >Alok Ranjan</a></p>
+            <p>Made with 🤍 by  Alok Ranjan</p>
         </div>
     </footer>
     </div>
